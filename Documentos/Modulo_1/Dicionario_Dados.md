@@ -22,200 +22,179 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 
 # Dicionário de Dados - Terraria
 
+# Dicionário de Dados - Terraria
+
 ## Tabela: DIALOGO
 
 | Nome        | Descrição               | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |-------------|--------------------------|--------------|---------|---------------------------------|
 | ID_Dialogo  | Identificador único do diálogo | Integer      | -       | PK                              |
-| texto       | Texto do diálogo        | String       | 255     | Não nulo                        |
-| ID_NPC      | Identificador do NPC associado ao diálogo | Integer      | -       | FK                  |
+| texto       | Texto do diálogo        | Varchar      | 255     | Não nulo                        |
 
 ## Tabela: NPC
 
 | Nome           | Descrição                 | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |----------------|----------------------------|--------------|---------|---------------------------------|
 | ID_NPC         | Identificador único do NPC | Integer      | -       | PK                              |
-| Nome           | Nome do NPC                | String       | 255     | Não nulo                        |
-| Tipo           | Tipo de NPC                | String       | 50      | vendedor, inimigo, aliado       |
-| Vida           | Quantidade de vida do NPC  | Integer      | -       | Não nulo                        |
-| Posição_X      | Coordenada X do NPC        | Float        | -       | Não nulo                        |
-| Posição_Y      | Coordenada Y do NPC        | Float        | -       | Não nulo                        |
-| Posição_Z      | Coordenada Z do NPC        | Float        | -       | Não nulo                        |
-| Comportamento  | Comportamento do NPC       | String       | 255     | Não nulo                        |
-| ID_Bioma       | Identificador do bioma     | Integer      | -       | FK (BIOMA.ID_Bioma)             |
-| ID_Personagem  | Identificador do personagem| Integer      | -       | FK (PERSONAGEM.ID_Personagem)   |
-| ID_Instancia_NPC | Identificador da instância do NPC | Integer | -   | FK                              |
+| Tipo           | Tipo de NPC                | Varchar      | 50      | Não nulo                        |
+| Comportamento  | Comportamento do NPC       | Varchar      | 255     | Não nulo                        |
+| ID_Personagem  | Identificador do personagem| Integer      | -       | FK                              |
+| ID_Dialogo     | Identificador do Diálogo   | Integer      | -       | FK                              |
 
 ## Tabela: PERSONAGEM
 
 | Nome          | Descrição                   | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |---------------|------------------------------|--------------|---------|---------------------------------|
 | ID_Personagem | Identificador único do personagem | Integer      | -       | PK                              |
-| Nome          | Nome do personagem           | String       | 255     | Não nulo                        |
-| Tipo          | Tipo de personagem           | String       | 50      | NPC, PC                         |
-| Habilidades   | Habilidades do personagem    | String       | 255     | Não nulo                        |
-| Nivel         | Nível do personagem          | Integer      | -       | Não nulo                        |
+| Nome          | Nome do personagem           | Varchar      | 255     | Não nulo                        |
+| Posicao       | Posição do personagem no mapa| Varchar      | 100     | Não nulo                        |
+| Vida          | Vida do personagem           | Integer      | -       | Não nulo                        |
 
 ## Tabela: BIOMA
 
 | Nome         | Descrição                   | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|------------------------------|--------------|---------|---------------------------------|
-| ID_Bioma     | Identificador único do bioma | Integer      | -       | PK                              |
-| Nome         | Nome do bioma                | String       | 255     | Não nulo                        |
-| Tipo         | Tipo de bioma                | String       | 50      | terrestre, subterrâneo, etc.    |
-| ID_Mundo     | Identificador do mundo       | Integer      | -       | FK                              |
-| ID_Item      | Identificador do item        | Integer      | -       | FK                              |
+| Nome         | Nome do bioma                | Varchar      | 255     | PK                              |
+| Tipo         | Tipo de bioma                | Varchar      | 50      | Não nulo                        |
 
 ## Tabela: INSTANCIA_NPC
 
-| Nome         | Descrição                   | Tipo de Dado | Tamanho | Restrições de Domínio           |
-|--------------|------------------------------|--------------|---------|---------------------------------|
-| ID_Instancia_NPC | Identificador único da instância do NPC | Integer | - | PK                         |
-| ID_NPC       | Identificador do NPC         | Integer      | -       | FK                             |
-| ID_Item      | Identificador do item        | Integer      | -       | FK                             |
+| Nome            | Descrição                   | Tipo de Dado | Tamanho | Restrições de Domínio           |
+|-----------------|------------------------------|--------------|---------|---------------------------------|
+| ID_Instancia_NPC | Identificador único da instância do NPC | Integer | - | PK                             |
+| ID_NPC          | Identificador do NPC         | Integer      | -       | FK                             |
+| VidaAtual       | Informa a vida atual do NPC  | Integer      | -       | Não nulo                        |
+| Nome            | Nome do NPC                  | Varchar      | 255     | Não nulo                        |
 
 ## Tabela: PC
 
 | Nome          | Descrição                   | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |---------------|------------------------------|--------------|---------|---------------------------------|
 | ID_PC         | Identificador único do personagem jogável | Integer      | -       | PK                              |
-| Nome          | Nome do personagem jogável   | String       | 255     | Não nulo                        |
-| Nivel         | Nível do personagem jogável  | Integer      | -       | Não nulo                        |
-| Vida          | Quantidade de vida do personagem jogável | Integer      | -       | Não nulo                        |
 | Mana          | Quantidade de mana do personagem jogável | Integer      | -       | Não nulo                        |
-| ID_Usuario    | Identificador do usuário     | Integer      | -       | FK (USUARIO.ID_Usuario)         |
-| ID_Instancia_PC | Identificador da instância do personagem jogável | Integer | - | FK  |
-| ID_Personagem | Identificador do personagem  | Integer      | -       | FK    |
-
-## Tabela: USUARIO
-
-| Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
-|--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Usuario   | Identificador único do usuário | Integer      | -       | PK                              |
-| Nome         | Nome do usuário               | String       | 255     | Não nulo                        |
-| Email        | Email do usuário              | String       | 255     | Não nulo, Único                 |
-| Senha        | Senha do usuário              | String       | 255     | Não nulo                        |
+| ID_Personagem | Identificador do personagem  | Integer      | -       | FK                              |
 
 ## Tabela: INSTANCIA_PC
 
-| Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
-|--------------|-------------------------------|--------------|---------|---------------------------------|
+| Nome            | Descrição                   | Tipo de Dado | Tamanho | Restrições de Domínio           |
+|-----------------|------------------------------|--------------|---------|---------------------------------|
 | ID_Instancia_PC | Identificador único da instância do personagem jogável | Integer | - | PK                              |
-| ID_PC        | Identificador do personagem jogável | Integer      | -       | FK (PC.ID_PC)                   |
-| ID_Mundo     | Identificador do mundo        | Integer      | -       | FK              |
-| ID_Inventario| Identificador do inventário   | Integer      | -       | FK    |
+| ID_PC           | Identificador do personagem jogável | Integer      | -       | FK                              |
+| Vida_Atual      | Quantidade de vida do personagem jogável | Integer      | -       | Não nulo                        |
+| Mana_Atual      | Quantidade de mana do personagem jogável | Integer      | -       | Não nulo                        |
 
 ## Tabela: MUNDO
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | ID_Mundo     | Identificador único do mundo  | Integer      | -       | PK                              |
-| Nome         | Nome do mundo                 | String       | 255     | Não nulo                        |
-| Tamanho      | Tamanho do mundo              | String       | 50      | Pequeno, Médio, Grande          |
-| Semente      | Semente do mundo              | String       | 255     | Não nulo                        |
-| Dificuldade  | Nível de dificuldade do mundo | String       | 50      | Fácil, Normal, Difícil          |
-| Clima        | Clima do mundo                | String       | 50      | Não nulo                        |
-| Hora_do_dia  | Hora do dia no mundo          | String       | 50      | Não nulo                        |
+| Nome         | Nome do mundo                 | Varchar      | 255     | Não nulo                        |
+| Tamanho      | Tamanho do mundo              | Varchar      | 50      | Não nulo                        |
+| Semente      | Semente do mundo              | Varchar      | 255     | Não nulo                        |
+| Dificuldade  | Nível de dificuldade do mundo | Varchar      | 50      | Não nulo                        |
+| Clima        | Clima do mundo                | Varchar      | 50      | Não nulo                        |
+| Hora_do_dia  | Hora do dia no mundo          | Varchar      | 50      | Não nulo                        |
 
 ## Tabela: EVENTO
 
-| Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
-|--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Evento    | Identificador único do evento | Integer      | -       | PK                              |
-| Nome         | Nome do evento                | String       | 255     | Não nulo                        |
-| Tipo         | Tipo de evento                | String       | 50      | Não nulo                        |
-| Data_Inicio  | Data de início do evento      | Date         | -       | Não nulo                        |
-| Data_Fim     | Data de término do evento     | Date         | -       | Não nulo                        |
-| ID_Mundo     | Identificador do mundo        | Integer      | -       | FK                              |
+| Nome        | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
+|-------------|-------------------------------|--------------|---------|---------------------------------|
+| Nome        | Nome do evento                | Varchar      | 255     | PK                              |
+| Tipo        | Tipo de evento                | Varchar      | 50      | Não nulo                        |
+| Data_Inicio | Data de início do evento      | Date         | -       | Não nulo                        |
+| Data_Fim    | Data de término do evento     | Date         | -       | Não nulo                        |
 
 ## Tabela: INVENTARIO
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | ID_Inventario| Identificador único do inventário | Integer      | -       | PK                              |
-| ID_Item      | Identificador do item         | Integer      | -       | FK                |
+| ID_Item      | Identificador do item         | Integer      | -       | FK                              |
 | Quantidade   | Quantidade de itens no inventário | Integer      | -       | Não nulo                        |
 
 ## Tabela: ITEM
 
-| Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
-|--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Item      | Identificador único do item   | Integer      | -       | PK                              |
-| Nome         | Nome do item                  | String       | 255     | Não nulo
-| Tipo         | Tipo de item                  | String       | 50      | Consumível, Roupa, Acessório, Ferramenta, Bloco |
-| ID_Receita   | Identificador da receita associada ao item | Integer | - | FK          |
-| ID_Inventario| Identificador do inventário associado ao item | Integer | - | FK    |
-| ID_Instancia_PC | Identificador da instância do personagem jogável associado ao item | Integer | - | FK  |
-| ID_Bioma     | Identificador do bioma associado ao item | Integer  | - | FK             |
+| Nome            | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
+|-----------------|-------------------------------|--------------|---------|---------------------------------|
+| Nome            | Nome do item                  | Varchar      | 255     | PK                        |
+| Tipo            | Tipo de item                  | Varchar      | 50      | Não nulo  |
+| Acumulavel      | Informa se um item pode ser acumulado | Boolean      | -      | Não nulo  |
 
 ## Tabela: RECEITA
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | ID_Receita   | Identificador único da receita | Integer     | -       | PK                              |
-| Nome         | Nome da receita               | String      | 255     | Não nulo                        |
-| ID_Item      | Identificador do item associado à receita | Integer | - | FK                |
-| ID_Bloco     | Identificador do bloco associado à receita | Integer | - | FK              |
+| Nome         | Nome da receita               | Varchar      | 255     | Não nulo                        |
+| Item_Final   | Identificador do item associado à receita | Integer | - | FK                              |
+| Estacao_Bloco| Identificador do bloco associado à receita | Integer | - | FK                              |
 
 ## Tabela: CONSUMIVEL
 
-| Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
-|--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Consumivel | Identificador único do consumível | Integer  | -       | PK                              |
-| Efeito       | Efeito do consumível          | String      | 255     | Não nulo                        |
-| Duracao      | Duração do efeito do consumível | Integer   | -       | Não nulo                        |
-| ID_Item      | Identificador do item associado ao consumível | Integer | - | FK                |
+| Nome     | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
+|----------|-------------------------------|--------------|---------|---------------------------------|
+| Nome     | Identificador único do consumível | Varchar  | 255     | PK                              |
+| ID_Item  | Identificador do item associado ao consumível | Integer | - | FK                              |
+
+## Tabela: BUFF
+
+| Nome        | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
+|-------------|-------------------------------|--------------|---------|---------------------------------|
+| Nome        | Identificador único do consumível | Varchar  | 255     | PK                              |
+| Efeito      | Efeito do consumível          | Varchar      | 255     | Não nulo                        |
+| Duracao     | Duração do efeito do consumível | Integer   | -       | Não nulo                        |
 
 ## Tabela: ROUPA
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Roupa     | Identificador único da roupa  | Integer      | -       | PK                              |
+| Nome         | Identificador único da roupa  | Varchar      | 255     | PK                              |
 | Defesa       | Quantidade de defesa fornecida pela roupa | Integer | - | Não nulo                        |
-| ID_Item      | Identificador do item associado à roupa | Integer | - | FK                |
-| ID_Modificador | Identificador do modificador associado à roupa | Integer | - | FK  |
+| Descricao    | Informações que podem ser úteis aos jogadores | Varchar | 255 | - |
+| Aparencia    | Efeitos aplicados sobre a roupa | Boolean | - | Não nulo                        |
+| Item_Nome    | Identificador do modificador associado à roupa | Integer | - | FK                              |
 
 ## Tabela: ACESSORIO
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Acessorio | Identificador único do acessório | Integer   | -       | PK                              |
-| Efeito       | Efeito do acessório           | String      | 255     | Não nulo                        |
-| ID_Item      | Identificador do item associado ao acessório | Integer | - | FK               |
-| ID_Modificador | Identificador do modificador associado ao acessório | Integer | - | FK  |
+| Nome         | Identificador único do acessório | Varchar  | 255     | PK                              |
+| Efeito       | Efeito do acessório           | Varchar      | 255     | Não nulo                        |
+| Item_Nome    | Identificador do item associado ao acessório | Varchar  | 255 | FK                              |
+| Defesa       | Defesa aplicada ao acessório  | Integer      | -       | Não nulo                        |
+| Descricao    | Informações que podem ser úteis aos jogadores | Varchar | 255 | -                              |
 
 ## Tabela: FERRAMENTA
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Ferramenta | Identificador único da ferramenta | Integer  | -       | PK                              |
-| Tipo_Ferramenta | Tipo de ferramenta        | String      | 50      | Não nulo                        |
-| Poder        | Poder da ferramenta          | Integer     | -       | Não nulo                        |
-| ID_Item      | Identificador do item associado à ferramenta | Integer | - | FK               |
-| ID_Modificador | Identificador do modificador associado à ferramenta | Integer | - | FK  |
+| Nome         | Identificador único da ferramenta | Varchar  | 255     | PK                              |
+| Tipo         | Tipo de ferramenta            | Varchar      | 50      | Não nulo                        |
+| Poder        | Poder da ferramenta           | Integer      | -       | Não nulo                        |
+| Eficiencia   | Informações em relação à eficiência da ferramenta | Integer | - | Não nulo              |
+| ChanceCrit   | Informações em relação à taxa de dano crítico da ferramenta | Integer | - | Não nulo              |
+| Item_Nome    | Identificador do modificador associado à ferramenta | Varchar  | 255 | FK                             |
 
 ## Tabela: BLOCO
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Bloco     | Identificador único do bloco  | Integer      | -       | PK                              |
-| Tipo_Bloco   | Tipo de bloco                 | String       | 50      | Não nulo                        |
-| ID_Item      | Identificador do item associado ao bloco | Integer | - | FK                |
-| ID_Receita   | Identificador da receita associada ao bloco | Integer | - | FK         |
+| Nome         | Identificador único do bloco  | Varchar      | 255     | PK                              |
+| Tipo         | Tipo de bloco                 | Varchar      | 50      | Não nulo                        |
+| Item_Nome    | Identificador do item associado ao bloco | Varchar  | 255 | FK                              |
 
 ## Tabela: MODIFICADORES
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Modificador | Identificador único do modificador | Integer | -     | PK                              |
-| Nome         | Nome do modificador           | String      | 255     | Não nulo                        |
-| Efeito       | Efeito do modificador         | String      | 255     | Não nulo                        |
-| ID_Roupa     | Identificador da roupa associada ao modificador | Integer | - | FK              |
-| ID_Acessorio | Identificador do acessório associado ao modificador | Integer | - | FK      |
-| ID_Ferramenta | Identificador da ferramenta associada ao modificador | Integer | - | FK    |
+| Nome         | Identificador único do modificador | Varchar  | 255     | PK                              |
+| Nome         | Nome do modificador           | Varchar      | 255     | Não nulo                        |
+
+
 
 # Histórico de Versão
 
 | Versão | Data       | Descrição                                     | Autor       |
 |--------|------------|-----------------------------------------------|-------------|
 | 1.0    | 2024-07-20 | Criação inicial do Dicionário de Dados         | [Euardo](https://github.com/edudsan)  |
+| 1.1    | 2024-07-21 | Atualização do Dicionário de Dados            | [Euardo](https://github.com/edudsan)  |
