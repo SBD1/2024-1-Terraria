@@ -8,8 +8,13 @@ que o banco de dados da aplicação terá, contendo entidades, atributos e relac
 ## Versão 2
 <img src= './../../Images/DER-TerrariaV2.png'>
 
+## Versão 3 
+<img src= './../../Images/DER-TerrariaV3.png'>
+
 # Histórico de Versão
 
 | Versão | Data       | Descrição                                     | Autor       |
 |--------|------------|-----------------------------------------------|-------------|
 | 1.0    | 2024-07-20 | Criação do Documento e adição da Versão 1 e 2 do DER        | [Thiago](https://github.com/Thiab394)  |
+| 2.0    | 2024-07-20 | Adição da Versão 3 do DER        | [André](https://github.com/AGoretti)
+
