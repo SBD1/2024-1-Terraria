@@ -103,4 +103,4 @@
 
 | Versão | Data       | Descrição                                     | Autor       |
 |--------|------------|-----------------------------------------------|-------------|
-| 1.0    | 2024-07-22 | Criação inicial do Dicionário de Dados         | [Euardo](https://github.com/edudsan)  |
+| 1.0    | 2024-07-22 | Criação inicial do MER        | [Euardo](https://github.com/edudsan), [AGoretti](https://github.com/AGoretti), [Thiago](https://github.com/Thiab394)|
