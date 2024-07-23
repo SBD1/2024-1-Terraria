@@ -1,3 +1,10 @@
+# Modelo Entidade-Relacionamento (MER) do Terraria
+
+Este repositório contém o Modelo Entidade-Relacionamento (MER) para o jogo de texto tipo RPG baseado no Terraria. O MER é uma representação visual e lógica das estruturas de dados do jogo, detalhando como as diferentes entidades se relacionam e interagem entre si. Este modelo serve como uma base fundamental para o desenvolvimento do banco de dados e a implementação de funcionalidades no jogo.
+
+## Objetivo
+O objetivo deste MER é proporcionar uma visão clara e organizada das entidades principais do jogo, seus atributos, e os relacionamentos entre elas. Com isso, buscamos garantir a integridade, consistência e eficiência no gerenciamento dos dados ao longo do desenvolvimento do jogo.
+
 ## 1. Entidades
 - Dialogo
 - NPC
