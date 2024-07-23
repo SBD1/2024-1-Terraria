@@ -107,17 +107,9 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 | Nome        | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |-------------|-------------------------------|--------------|---------|---------------------------------|
 | Nome        | Nome do evento                | Varchar      | 255     | PK                              |
-| Tipo        | Tipo de evento                | Varchar      | 50      | Não nulo                        |
+| Tipo        | Tipo de evento                | Enumerate      | -      | Não nulo, Valores: (1, 2, 3)                       |
 | Data_Inicio | Data de início do evento      | Date         | -       | Não nulo                        |
 | Data_Fim    | Data de término do evento     | Date         | -       | Não nulo                        |
-
-## Tabela: INVENTARIO
-
-| Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
-|--------------|-------------------------------|--------------|---------|---------------------------------|
-| ID_Inventario| Identificador único do inventário | Integer      | -       | PK                              |
-| ID_Item      | Identificador do item         | Integer      | -       | FK                              |
-| Quantidade   | Quantidade de itens no inventário | Integer      | -       | Não nulo                        |
 
 ## Tabela: ITEM
 
@@ -132,14 +124,14 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | ID_Receita   | Identificador único da receita | Integer     | -       | PK                              |
-| Item_Final   | Identificador do item associado à receita | Integer | - | FK                              |
-| Estacao_Bloco| Identificador do bloco associado à receita | Integer | - | FK                              |
+| Item_Final   | Identificador do item associado à receita | varchar | 50 | FK                              |
+| Estacao_Bloco| Identificador do bloco associado à receita | varchar | 255 | FK                              |
 
 ## Tabela: CONSUMIVEL
 
 | Nome     | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |----------|-------------------------------|--------------|---------|---------------------------------|
-| Nome     | Identificador único do consumível | Varchar  | 255     | PK                              |
+| Item_Nome     | Identificador único do consumível | Varchar  | 255     | PK, FK                              |
 
 ## Tabela: BUFF
 
@@ -156,14 +148,14 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 | Defesa       | Quantidade de defesa fornecida pela roupa | Integer | - | Não nulo                        |
 | Descricao    | Informações que podem ser úteis aos jogadores | Varchar | 255 | - |
 | Aparencia    | Efeitos aplicados sobre a roupa | Boolean | - | Não nulo                        |
-| Item_Nome    | Identificador do modificador associado à roupa | Integer | - | FK                              |
+| Item_Nome    | Identificador do item associado à roupa | Integer | - | PF, FK                              |
 
 ## Tabela: ACESSORIO
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | Efeito       | Efeito do acessório           | Varchar      | 255     | Não nulo                        |
-| Item_Nome    | Identificador do item associado ao acessório | Varchar  | 255 | FK                              |
+| Item_Nome    | Identificador do item associado ao acessório | Varchar  | 255 | PF, FK                              |
 | Defesa       | Defesa aplicada ao acessório  | Integer      | -       | Não nulo                        |
 | Descricao    | Informações que podem ser úteis aos jogadores | Varchar | 255 | -                              |
 
@@ -175,21 +167,21 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 | Poder        | Poder da ferramenta           | Integer      | -       |    -                     |
 | Eficiencia   | Informações em relação à eficiência da ferramenta | Integer | - |-              |
 | ChanceCrit   | Informações em relação à taxa de dano crítico da ferramenta | Integer | - | Não nulo              |
-| Item_Nome    | Identificador do modificador associado à ferramenta | Varchar  | 255 | FK                             |
+| Item_Nome    | Identificador do item associado à ferramenta | Varchar  | 255 | PK, FK                             |
 
 ## Tabela: BLOCO
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | Tipo         | Tipo de bloco                 | Varchar      | 50      | Não nulo                        |
-| Item_Nome    | Identificador do item associado ao bloco | Varchar  | 255 | FK                              |
+| Item_Nome    | Identificador do item associado ao bloco | Varchar  | 255 | PK, FK                              |
 
 ## Tabela: MODIFICADOR
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | Nome         | Identificador único do modificador | Varchar  | 255     | PK                              |
-| Nome         | Nome do modificador           | Varchar      | 255     | Não nulo                        |
+| Efeito         | Informação sobre o efeito do modificador           | Varchar      | 255     | Não nulo                        |
 
 
 
@@ -199,3 +191,4 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 |--------|------------|-----------------------------------------------|-------------|
 | 1.0    | 2024-07-20 | Criação inicial do Dicionário de Dados         | [Euardo](https://github.com/edudsan)  |
 | 1.1    | 2024-07-21 | Atualização do Dicionário de Dados            | [Euardo](https://github.com/edudsan)  |
+| 1.2    | 2024-07-21 | Atualização do Dicionário de Dados            | [AGoretti](https://github.com/AGoretti) [Thiago](https://github.com/Thiab394)  |
