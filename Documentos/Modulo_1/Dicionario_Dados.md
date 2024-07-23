@@ -22,7 +22,6 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 
 # Dicionário de Dados - Terraria
 
-# Dicionário de Dados - Terraria
 
 ## Tabela: DIALOGO
 
@@ -47,8 +46,16 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 |---------------|------------------------------|--------------|---------|---------------------------------|
 | ID_Personagem | Identificador único do personagem | Integer      | -       | PK                              |
 | Nome          | Nome do personagem           | Varchar      | 255     | Não nulo                        |
-| Posicao       | Posição do personagem no mapa| Varchar      | 100     | Não nulo                        |
 | Vida          | Vida do personagem           | Integer      | -       | Não nulo                        |
+
+## Tabela: POSICAO
+
+| Nome          | Descrição                   | Tipo de Dado | Tamanho | Restrições de Domínio           |
+|---------------|------------------------------|--------------|---------|---------------------------------|
+| ID_Personagem | Identificador único do personagem | Integer      | -       | PK, FK                              |
+| ID_Mundo      | Identificador único do mundo       | Integer      | -     | PK, FK                        |
+| X             | Posição do personagem no eixo X| Integer      | -    | Não nulo                        |
+| Y             | Posição do personagem no eixo Y| Integer      | -       | Não nulo                        |
 
 ## Tabela: BIOMA
 
@@ -89,11 +96,11 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | ID_Mundo     | Identificador único do mundo  | Integer      | -       | PK                              |
 | Nome         | Nome do mundo                 | Varchar      | 255     | Não nulo                        |
-| Tamanho      | Tamanho do mundo              | Varchar      | 50      | Não nulo                        |
-| Semente      | Semente do mundo              | Varchar      | 255     | Não nulo                        |
-| Dificuldade  | Nível de dificuldade do mundo | Varchar      | 50      | Não nulo                        |
-| Clima        | Clima do mundo                | Varchar      | 50      | Não nulo                        |
-| Hora_do_dia  | Hora do dia no mundo          | Varchar      | 50      | Não nulo                        |
+| Tamanho      | Tamanho do mundo              | Enumerate    | -     | Não nulo, Valores: (1, 2, 3)                        |
+| Semente      | Semente do mundo              | Integer      | -    | Não nulo                        |
+| Dificuldade  | Nível de dificuldade do mundo | Enumerate    | -      | Não nulo, Valores: (1, 2, 3, 4)                       |
+| Clima        | Clima do mundo                | Integer      | -      | Não nulo                        |
+| Hora_do_dia  | Hora do dia no mundo          | Integer      | -      | Não nulo                        |
 
 ## Tabela: EVENTO
 
@@ -125,7 +132,6 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
 | ID_Receita   | Identificador único da receita | Integer     | -       | PK                              |
-| Nome         | Nome da receita               | Varchar      | 255     | Não nulo                        |
 | Item_Final   | Identificador do item associado à receita | Integer | - | FK                              |
 | Estacao_Bloco| Identificador do bloco associado à receita | Integer | - | FK                              |
 
@@ -134,7 +140,6 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 | Nome     | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |----------|-------------------------------|--------------|---------|---------------------------------|
 | Nome     | Identificador único do consumível | Varchar  | 255     | PK                              |
-| ID_Item  | Identificador do item associado ao consumível | Integer | - | FK                              |
 
 ## Tabela: BUFF
 
@@ -148,7 +153,6 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| Nome         | Identificador único da roupa  | Varchar      | 255     | PK                              |
 | Defesa       | Quantidade de defesa fornecida pela roupa | Integer | - | Não nulo                        |
 | Descricao    | Informações que podem ser úteis aos jogadores | Varchar | 255 | - |
 | Aparencia    | Efeitos aplicados sobre a roupa | Boolean | - | Não nulo                        |
@@ -158,7 +162,6 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| Nome         | Identificador único do acessório | Varchar  | 255     | PK                              |
 | Efeito       | Efeito do acessório           | Varchar      | 255     | Não nulo                        |
 | Item_Nome    | Identificador do item associado ao acessório | Varchar  | 255 | FK                              |
 | Defesa       | Defesa aplicada ao acessório  | Integer      | -       | Não nulo                        |
@@ -168,10 +171,9 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| Nome         | Identificador único da ferramenta | Varchar  | 255     | PK                              |
 | Tipo         | Tipo de ferramenta            | Varchar      | 50      | Não nulo                        |
-| Poder        | Poder da ferramenta           | Integer      | -       | Não nulo                        |
-| Eficiencia   | Informações em relação à eficiência da ferramenta | Integer | - | Não nulo              |
+| Poder        | Poder da ferramenta           | Integer      | -       |    -                     |
+| Eficiencia   | Informações em relação à eficiência da ferramenta | Integer | - |-              |
 | ChanceCrit   | Informações em relação à taxa de dano crítico da ferramenta | Integer | - | Não nulo              |
 | Item_Nome    | Identificador do modificador associado à ferramenta | Varchar  | 255 | FK                             |
 
@@ -179,11 +181,10 @@ Abaixo está a descrição detalhada de cada tabela e seus respectivos campos.
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
-| Nome         | Identificador único do bloco  | Varchar      | 255     | PK                              |
 | Tipo         | Tipo de bloco                 | Varchar      | 50      | Não nulo                        |
 | Item_Nome    | Identificador do item associado ao bloco | Varchar  | 255 | FK                              |
 
-## Tabela: MODIFICADORES
+## Tabela: MODIFICADOR
 
 | Nome         | Descrição                    | Tipo de Dado | Tamanho | Restrições de Domínio           |
 |--------------|-------------------------------|--------------|---------|---------------------------------|
