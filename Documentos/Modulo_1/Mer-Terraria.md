@@ -21,25 +21,25 @@
   
 ## 2. Atributos
 
-- **Dialogo:** <ins>ID_Dialogo</ins>(PK), Texto;
-- **NPC:** <ins>ID_NPC</ins>(PK), Tipo, Comportamento, ID_Personagem (FK), ID_Dialogo (FK);
-- **Personagem:** <ins>ID_Personagem</ins>(PK), Nome, Vida;
-- **Posicao:** <ins>ID_Personagem</ins> (PK, FK), <ins>ID_Mundo</ins> (PK, FK), X, Y;
-- **Bioma:** <ins>Nome</ins>(PK), Tipo;
-- **Instancia_NPC:** <ins>ID_Instancia_NPC</ins>(PK), ID_NPC (FK), VidaAtual, Nome;
-- **PC:** <ins>ID_PC</ins>(PK), Mana, ID_Personagem (FK);
-- **Instancia_PC:** <ins>ID_Instancia_PC</ins>(PK), ID_PC (FK), Vida_Atual, Mana_Atual;
-- **Mundo:** <ins>ID_Mundo</ins>(PK), Nome, Tamanho, Semente, Dificuldade, Clima, Hora_do_dia;
-- **Evento:** <ins>Nome</ins>(PK), Tipo, Data_Inicio, Data_Fim;
-- **Item:** <ins>Nome</ins>(PK), Tipo, Acumulavel;
-- **Receita:** <ins>ID_Receita</ins>(PK), Item_Final (FK), Estacao_Bloco (FK);
-- **Consumivel:** <ins>Item_Nome</ins> (PK, FK);
-- **Buff:** <ins>Nome</ins>(PK), Efeito, Duracao;
-- **Roupa:** <ins>Item_Nome</ins> (PK, FK), Defesa, Descricao, Aparencia;
-- **Acessorio:** <ins>Item_Nome</ins> (PK, FK), Efeito, Defesa, Descricao;
-- **Ferramenta:** <ins>Item_Nome</ins> (PK, FK), Tipo, Poder, Eficiencia, ChanceCrit;
-- **Bloco:** <ins>Item_Nome</ins> (PK, FK), Tipo;
-- **Modificador:** <ins>Nome</ins>(PK), Efeito;
+- **Dialogo:** <ins>ID_Dialogo</ins>, Texto;
+- **NPC:** <ins>ID_NPC</ins>, Tipo, Comportamento, ID_Personagem (FK), ID_Dialogo (FK);
+- **Personagem:** <ins>ID_Personagem</ins>, Nome, Vida;
+- **Posicao:** <ins>ID_Personagem</ins>, <ins>ID_Mundo</ins>, X, Y;
+- **Bioma:** <ins>Nome</ins>, Tipo;
+- **Instancia_NPC:** <ins>ID_Instancia_NPC</ins>, ID_NPC (FK), VidaAtual, Nome;
+- **PC:** <ins>ID_PC</ins>, Mana, ID_Personagem (FK);
+- **Instancia_PC:** <ins>ID_Instancia_PC</ins>, ID_PC (FK), Vida_Atual, Mana_Atual;
+- **Mundo:** <ins>ID_Mundo</ins>, Nome, Tamanho, Semente, Dificuldade, Clima, Hora_do_dia;
+- **Evento:** <ins>Nome</ins>, Tipo, Data_Inicio, Data_Fim;
+- **Item:** <ins>Nome</ins>, Tipo, Acumulavel;
+- **Receita:** <ins>ID_Receita</ins>, Item_Final (FK), Estacao_Bloco (FK);
+- **Consumivel:** <ins>Item_Nome</ins>;
+- **Buff:** <ins>Nome</ins>, Efeito, Duracao;
+- **Roupa:** <ins>Item_Nome</ins>, Defesa, Descricao, Aparencia;
+- **Acessorio:** <ins>Item_Nome</ins>, Efeito, Defesa, Descricao;
+- **Ferramenta:** <ins>Item_Nome</ins>, Tipo, Poder, Eficiencia, ChanceCrit;
+- **Bloco:** <ins>Item_Nome</ins>, Tipo;
+- **Modificador:** <ins>Nome</ins>, Efeito;
 
 ## 3. Relacionamentos
 
