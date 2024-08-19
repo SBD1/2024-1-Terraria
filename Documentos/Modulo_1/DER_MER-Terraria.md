@@ -14,6 +14,10 @@ que o banco de dados da aplicação terá, contendo entidades, atributos e relac
 ## Versão 4
 <img src= './../../Images/DER-TerrariaV4.png'>
 
+## Versão 5
+<img src= './../../Images/DER-TerrariaV5.png'>
+Essa versão é a versão corrigida de acordo com as mudanças vistas e aplicadas ao realizar o modulo 2, feita para ficar de acordo com os arquivos criados, como o DDL,DML,DQL e Algebra Relacional.
+
 # Histórico de Versão
 
 | Versão | Data       | Descrição                                     | Autor       |
@@ -21,4 +25,5 @@ que o banco de dados da aplicação terá, contendo entidades, atributos e relac
 | 1.0    | 2024-07-20 | Criação do Documento e adição da Versão 1 e 2 do DER        | [Thiago](https://github.com/Thiab394)  |
 | 2.0    | 2024-07-21 | Adição da Versão 3 do DER        | [André](https://github.com/AGoretti)
 | 3.0    | 2024-07-22 | Adição da Versão 4 do DER        | [André](https://github.com/AGoretti) [Thiago](https://github.com/Thiab394)
+| 4.0    | 2024-07-22 | Adição da Versão 5 do DER        |[Thiago](https://github.com/Thiab394)
 
