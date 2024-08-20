@@ -157,7 +157,7 @@ CREATE TABLE Posicao (
     ID_Personagem INT NOT NULL,
     X INT NOT NULL,
     Y INT NOT NULL,
-    PRIMARY KEY (ID_Personagem, ID_Mundo),
+    PRIMARY KEY (ID_Mundo),
     FOREIGN KEY (ID_Personagem) REFERENCES Personagem(ID_P),
     FOREIGN KEY (ID_Mundo) REFERENCES Mundo(ID_Mundo)
 );
