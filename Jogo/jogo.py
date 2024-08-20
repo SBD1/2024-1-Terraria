@@ -3,8 +3,25 @@ import sys
 import os
 import time
 import random
+import psycopg2
+
+connection = psycopg2.connect(
+    dbname="polls",
+    user="postgres",
+    password="Postgres2021!",
+    host="localhost",
+    port="5432"
+)
+
+try:
+    cur = connection.cursor()
+except psycopg2.OperationalError:
+    print("erro")
+    pass
 
 screen_width = 100
+cur.execute('SELECT x, y from posicao where id_personagem = 1')
+teste = cur.fetchall()
 
 class player:
     def __init__(self):
@@ -13,7 +30,7 @@ class player:
         self.hp = 0
         self.mp = 0
         self.status_effects = []
-        self.location = 'b2'
+        self.location =  str(teste[0][0]) + str(teste[0][1])
         self.game_over = False
 myPlayer = player()
 
@@ -45,6 +62,8 @@ def title_screen():
     print('- Play -')
     print('- Help -')
     print('- Quit -')
+    print(teste[0][0])
+
     title_screen_selections()
     
 def help_menu():
@@ -66,170 +85,170 @@ DOWN = 'down', 'south'
 LEFT ='left', 'west' 
 RIGHT ='right', 'east'
 
-solved_places = {'a1': False, 'a2': False, 'a3': False, 'a4': False,
-                 'b1': False, 'b2': False, 'b3': False, 'b4': False,
-                 'c1': False, 'c2': False, 'c3': False, 'c4': False,
-                 'd1': False, 'd2': False, 'd3': False, 'd4': False}
+solved_places = {'11': False, '12': False, '13': False, '14': False,
+                 '21': False, '22': False, '23': False, '24': False,
+                 '31': False, '32': False, '33': False, '34': False,
+                 '41': False, '42': False, '43': False, '44': False}
 
 zonemap = {
-    'a1': {
+    '11': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
         UP: '',
-        DOWN: 'b1', 
+        DOWN: '21', 
         LEFT: '' ,
-        RIGHT: 'a2'
+        RIGHT: '12'
     },
-    'a2': {
+    '12': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
         UP: '',
-        DOWN: 'b2', 
-        LEFT: 'a1' ,
-        RIGHT: 'a3'
+        DOWN: '22', 
+        LEFT: '11' ,
+        RIGHT: '13'
     },    
-    'a3': {
+    '13': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
         UP: '',
-        DOWN: 'b3', 
-        LEFT: 'a2' ,
-        RIGHT: 'a4'
+        DOWN: '23', 
+        LEFT: '12' ,
+        RIGHT: '14'
     },    
-    'a4': {
+    '14': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
         UP: '',
-        DOWN: 'b4', 
-        LEFT: 'a3' ,
+        DOWN: '24', 
+        LEFT: '13' ,
         RIGHT: ''
     }, 
-    'b1': {
+    '21': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'a1',
-        DOWN: 'c1', 
+        UP: '11',
+        DOWN: '31', 
         LEFT: '' ,
-        RIGHT: 'b2'
+        RIGHT: '22'
     },
-    'b2': {
+    '22': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'a2',
-        DOWN: 'c2', 
-        LEFT: 'b1' ,
-        RIGHT: 'b3'
+        UP: '12',
+        DOWN: '32', 
+        LEFT: '21' ,
+        RIGHT: '23'
     },    
-    'b3': {
+    '23': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'a3',
-        DOWN: 'c3', 
-        LEFT: 'b2' ,
-        RIGHT: 'b3'
+        UP: '13',
+        DOWN: '33', 
+        LEFT: '22' ,
+        RIGHT: '23'
     },    
-    'b4': {
+    '24': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'a4',
-        DOWN: 'c4', 
-        LEFT: 'b3' ,
+        UP: '14',
+        DOWN: '34', 
+        LEFT: '23' ,
         RIGHT: ''
     },
-    'c1': {
+    '31': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'b1',
-        DOWN: 'd1', 
+        UP: '21',
+        DOWN: '41', 
         LEFT: '' ,
-        RIGHT: 'c2'
+        RIGHT: '32'
     },
-    'c2': {
+    '32': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'b2',
-        DOWN: 'd2', 
-        LEFT: 'c1' ,
-        RIGHT: 'c3'
+        UP: '22',
+        DOWN: '42', 
+        LEFT: '31' ,
+        RIGHT: '33'
     },    
-    'c3': {
+    '33': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'b3',
-        DOWN: 'd3', 
-        LEFT: 'c2' ,
-        RIGHT: 'c4'
+        UP: '23',
+        DOWN: '43', 
+        LEFT: '32' ,
+        RIGHT: '34'
     },    
-    'c4': {
+    '34': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'b4',
-        DOWN: 'd4', 
-        LEFT: 'c3' ,
+        UP: '24',
+        DOWN: '44', 
+        LEFT: '33' ,
         RIGHT: ''
     },
-    'd1': {
+    '41': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'c1',
+        UP: '31',
         DOWN: '', 
         LEFT: '' ,
-        RIGHT: 'd2'
+        RIGHT: '42'
     },
-    'd2': {
+    '42': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'c2',
+        UP: '32',
         DOWN: '', 
-        LEFT: 'd1' ,
-        RIGHT: 'd3'
+        LEFT: '41' ,
+        RIGHT: '43'
     },    
-    'd3': {
+    '43': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'c3',
+        UP: '33',
         DOWN: '', 
-        LEFT: 'd2' ,
-        RIGHT: 'd3'
+        LEFT: '42' ,
+        RIGHT: '43'
     },    
-    'd4': {
+    '44': {
         ZONENAME: 'Hall',
         DESCRIPTION: 'description',
         EXAMINATION: "examine",
         SOLVED: False,
-        UP: 'c4',
+        UP: '34',
         DOWN: '', 
-        LEFT: 'd3' ,
+        LEFT: '43' ,
         RIGHT: ''
     },                
 
@@ -278,6 +297,11 @@ def movement_handler(destination):
     else:
         print("\n" + "You have moved to the " + destination + ".")
         myPlayer. location = destination
+        x = int(destination[0])
+        y = int(destination[1])
+        print(x, y)
+        cur.execute('UPDATE posicao SET x = (%s), y = (%s) WHERE id_personagem = 1',(x, y))
+        connection.commit()
         print_location()
 
 def player_examine(action):
