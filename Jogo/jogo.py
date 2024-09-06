@@ -29,6 +29,8 @@ class player:
         self.game_over = False
 myPlayer = player()
 
+ID_PC = 0
+
 
 ##### Title Screen #####
 def title_screen_selections():
@@ -286,6 +288,7 @@ def player_move(myAction):
         movement_handler(destination)
 
 def movement_handler(destination):
+    encontro = ''
     if destination == "":
         print("Cant go any futher in this direction!")
     else:
@@ -294,6 +297,36 @@ def movement_handler(destination):
         x = int(destination[0])
         y = int(destination[1])
         print(x, y)
+
+        '''
+        Tratamentos Encontros:
+        if x == 1:
+            sala = 'a' + str(y)
+            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
+            encontro = cur.fetchall()
+            if encontro:
+                encotro_handler(encontro)
+        if x == 2:
+            sala = 'b' + str(y)
+            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
+            encontro = cur.fetchall()
+            if encontro:
+                encotro_handler(encontro)
+        if x == 3:
+            sala = 'c' + str(y)
+            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
+            encontro = cur.fetchall()
+            if encontro:
+                encotro_handler(encontro)
+        if x == 4:
+            sala = 'd' + str(y)
+            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
+            encontro = cur.fetchall()
+            if encontro:
+                encotro_handler(encontro)
+        '''
+              
+        
         cur.execute('UPDATE posicao SET x = (%s), y = (%s) WHERE id_personagem = 1',(x, y))
         connection.commit()
         print_location()
@@ -321,7 +354,7 @@ def setup_game():
         if pc_count == 0:
             print("Não há personagens jogáveis criados. Por favor, crie um novo personagem.")
             nome_personagem = input('Qual o nome do seu personagem?')
-            nome_escolhido,vida_atual_escolhida,mana_atual_escolhida = criar_personagem_jogavel(connection,nome_personagem)
+            nome_escolhido,vida_atual_escolhida,mana_atual_escolhida, ID_PC = criar_personagem_jogavel(connection,nome_personagem)
         else:
             print("Já existem alguns personagens, deseja escolher algum?")
             # Recupera os personagens existentes e suas respectivas vidas e manas atuais
@@ -343,13 +376,14 @@ def setup_game():
             if escolha == '0':
                 print("Criando um novo personagem...")
                 nome_personagem = input('Qual o nome do seu personagem?')
-                nome_escolhido,vida_atual_escolhida,mana_atual_escolhida = criar_personagem_jogavel(connection,nome_personagem)
+                nome_escolhido,vida_atual_escolhida,mana_atual_escolhida, ID_PC = criar_personagem_jogavel(connection,nome_personagem)
             else:
                 try:
                     escolha = int(escolha)
                     if 1 <= escolha <= len(personagens):
                         personagem_escolhido = personagens[escolha-1]
-                        nome_escolhido, vida_atual_escolhida, mana_atual_escolhida = personagem_escolhido
+                        nome_escolhido, vida_atual_escolhida, mana_atual_escolhida, ID_PC = personagem_escolhido
+                        print(ID_PC)
                         
                     else:
                         print("Escolha inválida. Tente novamente.")

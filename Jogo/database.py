@@ -56,7 +56,7 @@ def criar_personagem_jogavel(connection, nome_personagem):
             connection.commit()
 
             # Retorna IDs dos registros criados
-            return nome_personagem,vida_atual,mana_atual
+            return nome_personagem,vida_atual,mana_atual, id_pc
     
     except Exception as e:
         # Desfaz a transação em caso de erro

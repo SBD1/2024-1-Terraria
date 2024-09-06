@@ -240,3 +240,23 @@ CREATE TABLE Faz_Parte_NPC (
     FOREIGN KEY (Nome_Bioma) REFERENCES Bioma(Nome)
 );
 
+CREATE TABLE Instancia_Mundo (
+    ID_PC INT NOT NULL,
+    a1 VARCHAR(255),
+    a2 VARCHAR(255),
+    a3 VARCHAR(255),
+    a4 VARCHAR(255),
+    b1 VARCHAR(255),
+    b2 VARCHAR(255),
+    b3 VARCHAR(255),
+    b4 VARCHAR(255),
+    c1 VARCHAR(255),
+    c2 VARCHAR(255),
+    c3 VARCHAR(255),
+    c4 VARCHAR(255),
+    d1 VARCHAR(255),
+    d2 VARCHAR(255),
+    d3 VARCHAR(255),
+    d4 VARCHAR(255),
+);
+
