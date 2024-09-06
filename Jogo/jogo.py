@@ -1,3 +1,4 @@
+from database import *
 import cmd
 import sys
 import os
@@ -5,13 +6,7 @@ import time
 import random
 import psycopg2
 
-connection = psycopg2.connect(
-    dbname="polls",
-    user="postgres",
-    password="Postgres2021!",
-    host="localhost",
-    port="5432"
-)
+connection = create_connection()
 
 try:
     cur = connection.cursor()
@@ -55,19 +50,18 @@ def title_screen_selections():
             sys.exit()
 
 def title_screen():
-    os.system('clear')
+    #os.system('clear')
     print('############################')
-    print('# Welcome to the Text RPG! #')
+    print('# Welcome to the Text Terraria! #')
     print('############################')
     print('- Play -')
     print('- Help -')
     print('- Quit -')
-    print(teste[0][0])
 
     title_screen_selections()
     
 def help_menu():
-    print('# Welcome to the Text RPG!') 
+    print('# Welcome to the Text Terraria!') 
     print('############################')
     print('- Use up, down, left, right to move') 
     print('-Type your commands to do them') 
@@ -159,7 +153,7 @@ zonemap = {
         UP: '13',
         DOWN: '33', 
         LEFT: '22' ,
-        RIGHT: '23'
+        RIGHT: '24'
     },    
     '24': {
         ZONENAME: 'Hall',
@@ -319,82 +313,53 @@ def main_game_loop():
         prompt()
 # here handle if puzzles have been solved, boss defeated, explored everything, etc.
 def setup_game():
-    ### NAME COLLECT
-    question1 = "Hello, what's your name?\n"
-    for character in question1:
-        sys.stdout.write(character)
-        sys.stdout.flush()
-        time.sleep(0.05)
-    player_name = input(">")
-    myPlayer.name = player_name
+    try:
+        # Verifica se a tabela pc está vazia
+        cur.execute("SELECT COUNT(*) FROM pc;")
+        pc_count = cur.fetchone()[0]
 
+        if pc_count == 0:
+            print("Não há personagens jogáveis criados. Por favor, crie um novo personagem.")
+            nome_personagem = input('Qual o nome do seu personagem?')
+            nome_escolhido,vida_atual_escolhida,mana_atual_escolhida = criar_personagem_jogavel(connection,nome_personagem)
+        else:
+            print("Já existem alguns personagens, deseja escolher algum?")
+            # Recupera os personagens existentes e suas respectivas vidas e manas atuais
+            cur.execute("""
+                SELECT personagem.nome, instancia_pc.vidaAtual, instancia_pc.manaAtual
+                FROM personagem
+                JOIN pc ON personagem.id_p = pc.id_personagem
+                JOIN instancia_pc ON pc.id_pc = instancia_pc.id_pc;
+            """)
+            personagens = cur.fetchall()
 
-    ### JOB HANDLING
-    question2 = "what role do you want to play?\n"
-    question2added = "(You can play as a warrior, priest, or mage) \n" 
-    for character in question2:
-        sys.stdout.write(character)
-        sys.stdout.flush()
-        time.sleep(0.05)
-    for character in question2added:   
-        sys.stdout.write(character) 
-        sys.stdout.flush()
-        time.sleep(0.01)
-    player_job = input(">")
-    valid_jobs = ['warrior', 'mage', 'priest'] 
-    if player_job.lower() in valid_jobs:
-        myPlayer.job = player_job
-        print("You are now a " + player_job + "!\n") 
-    while player_job.lower() not in valid_jobs:
-        player_job = input(">")
-        if player_job.lower() in valid_jobs:
-            myPlayer.job = player_job
+            print("Personagens disponíveis:")
+            for idx, (nome, vida_atual, mana_atual) in enumerate(personagens, start=1):
+                print(f"{idx}. Nome: {nome}, Vida Atual: {vida_atual}, Mana Atual: {mana_atual}")
 
+            # Pergunta ao jogador qual personagem ele deseja usar
+            escolha = input("Digite o número do personagem que você deseja utilizar ou '0' para criar um novo personagem: ")
 
-            print("You are now a " + player_job + "'!\n")
-    #### PLAYER STATS
-    if myPlayer.job == 'warrior':
-        myPlayer.hp=120
-        myPlayer.mp = 20
-    elif myPlayer.job == 'mage':
-        myPlayer.hp = 40
-        myPlayer.mp = 120
-    elif myPlayer.job == 'priest':
-        myPlayer.hp = 60
-        myPlayer.mp = 60
+            if escolha == '0':
+                print("Criando um novo personagem...")
+                nome_personagem = input('Qual o nome do seu personagem?')
+                nome_escolhido,vida_atual_escolhida,mana_atual_escolhida = criar_personagem_jogavel(connection,nome_personagem)
+            else:
+                try:
+                    escolha = int(escolha)
+                    if 1 <= escolha <= len(personagens):
+                        personagem_escolhido = personagens[escolha-1]
+                        nome_escolhido, vida_atual_escolhida, mana_atual_escolhida = personagem_escolhido
+                        
+                    else:
+                        print("Escolha inválida. Tente novamente.")
+                except ValueError:
+                    print("Entrada inválida. Por favor, insira um número.")
 
-    
-    ### INTRODUCTION
-    question3 = "Welcome," + player_name + " the " + player_job + ".\n" 
-    for character in question3:
-        sys.stdout.write(character)
-        sys.stdout.flush()
-        time.sleep(0.05)
-    
+    except Exception as e:
+        print(f"Erro ao iniciar o jogo: {e}")
 
-
-    speech1 = "Welcome to this fantasy world!"
-    speech2 = "I hope it greets you well!"
-    speech3 = "Just make sure you don't get too lost..."
-    speech4 = "Heheheh..."
-    for character in speech1:
-        sys.stdout.write(character) 
-        sys.stdout.flush()
-        time.sleep(0.03)
-    for character in speech2:
-        sys.stdout.write(character) 
-        sys.stdout.flush() 
-        time.sleep(0.03)
-    for character in speech3: 
-        sys.stdout.write(character) 
-        sys.stdout.flush()
-        time.sleep(0.1)
-    for character in speech4: 
-        sys.stdout.write(character) 
-        sys.stdout.flush()
-        time.sleep(0.2)
-
-    os.system('clear')
+    #os.system('clear')
     print("##############")
     print("# Let's start now! #")
     print("##############")
