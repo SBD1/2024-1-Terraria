@@ -20,6 +20,8 @@ def criar_personagem_jogavel(connection, nome_personagem):
     mana_inicial = 20
     vida_atual = vida_inicial
     mana_atual = mana_inicial
+    x_padrao = 1
+    y_padrao = 1
     
     try:
         # Inicia uma transação
@@ -51,15 +53,53 @@ def criar_personagem_jogavel(connection, nome_personagem):
                 VALUES (%s, %s, %s)
                 RETURNING id_instancia_pc;
             """, (id_pc, vida_atual, mana_atual))
+
+            # Insere a posição incial do personagem criado
+            cur.execute("""
+                INSERT INTO posicao (id_pc, vidaAtual, manaAtual)
+                VALUES (%s, %s, %s)
+                RETURNING id_instancia_pc;
+            """, (id_pc, vida_atual, mana_atual))
             
             # Confirma a transação
             connection.commit()
 
-            # Retorna IDs dos registros criados
-            return nome_personagem,vida_atual,mana_atual, id_pc
+            # Retorna atributos necessarios do PC para o jogo
+            return nome_personagem,vida_atual,mana_atual,id_pc
     
     except Exception as e:
         # Desfaz a transação em caso de erro
         conn.rollback()
         print(f"Erro ao criar personagem jogável: {e}")
+        return None
+
+def criar_mundo(connection, nome_mundo,tamanho_mundo,dificuldade_mundo):
+    
+    try:
+        cur = connection.cursor()
+
+        # Gerar uma semente aleatória de 6 dígitos
+        semente_aleatoria = random.randint(100000, 999999)
+        clima_mundo = 4
+        Hora_do_Dia_mundo = 12
+        
+        # Inserir o novo mundo com a semente aleatória
+        cur.execute("""
+            INSERT INTO Mundo (Nome, tamanho, semente, dificuldade, clima, Hora_do_Dia)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            RETURNING ID_Mundo;
+        """, (nome_mundo,tamanho_mundo,semente_aleatoria,dificuldade_mundo,clima_mundo,Hora_do_Dia_mundo))
+
+        # Obter o ID do novo mundo criado
+        id_mundo = cur.fetchone()[0]
+
+        # Confirmar a transação
+        connection.commit()
+
+        return id_mundo #nome_mundo,tamanho_mundo,semente_aleatoria,dificuldade_mundo,clima_mundo,Hora_do_Dia_mundo
+
+    except Exception as e:
+        # Desfaz a transação em caso de erro
+        conn.rollback()
+        print(f"Erro ao criar novo mundo: {e}")
         return None

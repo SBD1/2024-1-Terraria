@@ -29,7 +29,7 @@ class player:
         self.game_over = False
 myPlayer = player()
 
-global ID_PC
+global ID_PC,ID_Mundo
 
 
 ##### Title Screen #####
@@ -347,59 +347,140 @@ def main_game_loop():
 # here handle if puzzles have been solved, boss defeated, explored everything, etc.
 def setup_game():
     try:
-        # Verifica se a tabela pc está vazia
-        cur.execute("SELECT COUNT(*) FROM pc;")
-        pc_count = cur.fetchone()[0]
-
-        if pc_count == 0:
-            print("Não há personagens jogáveis criados. Por favor, crie um novo personagem.")
-            nome_personagem = input('Qual o nome do seu personagem?')
-            nome_escolhido,vida_atual_escolhida,mana_atual_escolhida, ID_PC = criar_personagem_jogavel(connection,nome_personagem)
-        else:
-            print("Já existem alguns personagens, deseja escolher algum?")
-            # Recupera os personagens existentes e suas respectivas vidas e manas atuais
-            cur.execute("""
-                SELECT personagem.nome, instancia_pc.vidaAtual, instancia_pc.manaAtual, pc.id_pc
-                FROM personagem
-                JOIN pc ON personagem.id_p = pc.id_personagem
-                JOIN instancia_pc ON pc.id_pc = instancia_pc.id_pc;
-            """)
-            personagens = cur.fetchall()
-
-            print("Personagens disponíveis:")
-            for idx, (nome, vida_atual, mana_atual, id_pc) in enumerate(personagens, start=1):
-                print(f"{idx}. Nome: {nome}, Vida Atual: {vida_atual}, Mana Atual: {mana_atual}, ID_PC: {id_pc}")
-
-            # Pergunta ao jogador qual personagem ele deseja usar
-            escolha = input("Digite o número do personagem que você deseja utilizar ou '0' para criar um novo personagem: ")
-
-            if escolha == '0':
-                print("Criando um novo personagem...")
-                nome_personagem = input('Qual o nome do seu personagem?')
-                nome_escolhido,vida_atual_escolhida,mana_atual_escolhida, ID_PC = criar_personagem_jogavel(connection,nome_personagem)
-            else:
-                try:
-                    escolha = int(escolha)
-                    if 1 <= escolha <= len(personagens):
-                        personagem_escolhido = personagens[escolha-1]
-                        nome_escolhido, vida_atual_escolhida, mana_atual_escolhida, ID_PC = personagem_escolhido
-                        print(ID_PC)
-                        
-                    else:
-                        print("Escolha inválida. Tente novamente.")
-                except ValueError:
-                    print("Entrada inválida. Por favor, insira um número.")
-
+        mundo_handler()
+        personagem_handler()
+        
     except Exception as e:
         print(f"Erro ao iniciar o jogo: {e}")
 
     #os.system('clear')
-    print("##############")
-    print("# Let's start now! #")
-    print("##############")
+    print("")
+    print("# Vamos Começar!! #")
+    print("")
 
     main_game_loop()
 
+def personagem_handler():
+    # Verifica se a tabela pc está vazia
+    cur.execute("SELECT COUNT(*) FROM pc;")
+    pc_count = cur.fetchone()[0]
+
+    if pc_count == 0:
+        print("Não há personagens jogáveis criados. Por favor, crie um novo personagem.")
+        nome_personagem = input('Qual o nome do seu personagem?')
+        nome_escolhido,vida_atual_escolhida,mana_atual_escolhida, ID_PC = criar_personagem_jogavel(connection,nome_personagem)
+    else:
+        print("Já existem alguns personagens, deseja escolher algum?")
+        # Recupera os personagens existentes e suas respectivas vidas e manas atuais
+        cur.execute("""
+            SELECT personagem.nome, instancia_pc.vidaAtual, instancia_pc.manaAtual, pc.id_pc
+            FROM personagem
+            JOIN pc ON personagem.id_p = pc.id_personagem
+            JOIN instancia_pc ON pc.id_pc = instancia_pc.id_pc;
+        """)
+        personagens = cur.fetchall()
+
+        print("Personagens disponíveis:")
+        for idx, (nome, vida_atual, mana_atual, id_pc) in enumerate(personagens, start=1):
+            print(f"{idx}. Nome: {nome}, Vida Atual: {vida_atual}, Mana Atual: {mana_atual}, ID_PC: {id_pc}")
+
+        # Pergunta ao jogador qual personagem ele deseja usar
+        escolha = input("Digite o número do personagem que você deseja utilizar ou '0' para criar um novo personagem: ")
+
+        if escolha == '0':
+            print("Criando um novo personagem...")
+            nome_personagem = input('Qual o nome do seu personagem?')
+            nome_escolhido,vida_atual_escolhida,mana_atual_escolhida, ID_PC = criar_personagem_jogavel(connection,nome_personagem)
+        else:
+            try:
+                escolha = int(escolha)
+                if 1 <= escolha <= len(personagens):
+                    personagem_escolhido = personagens[escolha-1]
+                    nome_escolhido, vida_atual_escolhida, mana_atual_escolhida, ID_PC = personagem_escolhido
+                    
+                else:
+                    print("Escolha inválida. Tente novamente.")
+            except ValueError:
+                print("Entrada inválida. Por favor, insira um número.")
+
+def mundo_handler():
+    cur.execute("SELECT COUNT(*) FROM mundo;")
+    mundo_count = cur.fetchone()[0]
+
+    if mundo_count == 0:
+        # Caso não existam mundos, pedir para o usuário criar um novo
+        print("Não existem mundos cadastrados. Vamos criar um novo.")
+        nome_mundo = input("Digite o nome do mundo: ")
+        tamanho_mundo = input("Escolha o tamanho do mundo (Pequeno, Medio, Grande): ")
+        while tamanho_mundo not in ["Pequeno", "Medio", "Grande"]:
+            print("Tamanho inválido.")
+            tamanho_mundo = input("Escolha o tamanho do mundo (Pequeno, Medio, Grande): ")
+        
+        dificuldade_mundo = input("Escolha a dificuldade (Jornada, Normal, Expert, Master): ")
+        while dificuldade_mundo not in ['Jornada', 'Normal', 'Expert', 'Master']:
+            print("Dificuldade inválida.")
+            dificuldade_mundo = input("Escolha a dificuldade (Jornada, Normal, Expert, Master): ")
+        
+        # Criar um novo mundo com os valores fornecidos
+        ID_Mundo = criar_mundo(connection, nome_mundo, tamanho_mundo, dificuldade_mundo)
+        #mundo_criado = criar_mundo(connection, nome_mundo, tamanho_mundo, dificuldade_mundo)
+        #print(f"Mundo criado: {mundo_criado}")
+    else:
+        print("Já existem alguns mundos criados, deseja escolher algum?")
+        # Recupera os personagens existentes e suas respectivas vidas e manas atuais
+        cur.execute("SELECT ID_Mundo, Nome, Tamanho, Dificuldade FROM Mundo;")
+        mundos = cur.fetchall()
+
+        # Caso existam mundos, listar os mundos com índices
+        print("Mundos existentes:")
+        for index, mundo in enumerate(mundos, start=1):
+            print(f"{index}. Nome: {mundo[1]}. Tamanho: {mundo[2]}. Dificuldade: {mundo[3]}")
+
+        # Perguntar ao usuário se deseja criar um novo ou escolher um existente
+        escolha = input(f"Escolha o índice do mundo (ou 0 para criar um novo): ")
+
+        try:
+            escolha = int(escolha)
+
+            if escolha == 0:
+                # Criar um novo mundo
+                nome_mundo = input("Digite o nome do mundo: ")
+                tamanho_mundo = input("Escolha o tamanho do mundo (Pequeno, Medio, Grande): ")
+                while tamanho_mundo not in ["Pequeno", "Medio", "Grande"]:
+                    print("Tamanho inválido.")
+                    tamanho_mundo = input("Escolha o tamanho do mundo (Pequeno, Medio, Grande): ")
+
+                dificuldade_mundo = input("Escolha a dificuldade (Jornada, Normal, Expert, Master): ")
+                while dificuldade_mundo not in ['Jornada', 'Normal', 'Expert', 'Master']:
+                    print("Dificuldade inválida.")
+                    dificuldade_mundo = input("Escolha a dificuldade (Jornada, Normal, Expert, Master): ")
+
+                ID_Mundo = criar_mundo(connection, nome_mundo, tamanho_mundo, dificuldade_mundo)
+                print(ID_Mundo)
+                #mundo_criado = criar_mundo(connection, nome_mundo, tamanho_mundo, dificuldade_mundo)
+                #print(f"Mundo criado: {mundo_criado}")
+
+            elif 1 <= escolha <= len(mundos):
+                # Puxar os atributos do mundo escolhido por índice
+                mundo_escolhido = mundos[escolha - 1]
+                id_mundo = mundo_escolhido[0]
+                ID_Mundo = id_mundo
+
+                print(ID_Mundo)
+
+                cur.execute("SELECT * FROM Mundo WHERE ID_Mundo = %s;", (id_mundo,))
+                mundo_selecionado = cur.fetchone()
+
+                if mundo_selecionado:
+                    nome_mundo, tamanho_mundo, semente_mundo, dificuldade_mundo, clima_mundo, hora_do_dia_mundo = mundo_selecionado[1:]
+                    print(f"Mundo escolhido: Nome={nome_mundo}, Tamanho={tamanho_mundo}, Semente={semente_mundo}, Dificuldade={dificuldade_mundo}, Clima={clima_mundo}, Hora do Dia={hora_do_dia_mundo}")
+                else:
+                    print("Mundo não encontrado.")
+            else:
+                print("Índice inválido.")
+
+        except ValueError:
+            print("Entrada inválida. Digite um número.")
 
 
 title_screen()
