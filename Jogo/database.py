@@ -20,8 +20,6 @@ def criar_personagem_jogavel(connection, nome_personagem):
     mana_inicial = 20
     vida_atual = vida_inicial
     mana_atual = mana_inicial
-    x_padrao = 1
-    y_padrao = 1
     
     try:
         # Inicia uma transação
@@ -53,13 +51,6 @@ def criar_personagem_jogavel(connection, nome_personagem):
                 VALUES (%s, %s, %s)
                 RETURNING id_instancia_pc;
             """, (id_pc, vida_atual, mana_atual))
-
-            # Insere a posição incial do personagem criado
-            cur.execute("""
-                INSERT INTO posicao (id_pc, vidaAtual, manaAtual)
-                VALUES (%s, %s, %s)
-                RETURNING id_instancia_pc;
-            """, (id_pc, vida_atual, mana_atual))
             
             # Confirma a transação
             connection.commit()
@@ -69,8 +60,39 @@ def criar_personagem_jogavel(connection, nome_personagem):
     
     except Exception as e:
         # Desfaz a transação em caso de erro
-        conn.rollback()
+        connection.rollback()
         print(f"Erro ao criar personagem jogável: {e}")
+        return None
+
+def set_posicao_personagem_criado(connection,id_pc,id_m):
+    try:
+        cur = connection.cursor()
+        x_padrao = 1
+        y_padrao = 1
+
+        cur.execute("""
+            SELECT id_p FROM personagem
+            JOIN pc ON id_p = id_personagem
+            WHERE id_pc = (%s)
+        """, (id_pc,))
+
+        id_personagem = cur.fetchone()[0]
+
+        if id_personagem is None:
+            raise ValueError("Nenhum personagem encontrado para o id_pc fornecido.")
+
+        # Insere a posição incial do personagem criado
+        cur.execute("""
+            INSERT INTO posicao (id_mundo,id_personagem, x, y)
+            VALUES (%s, %s, %s,%s)
+        """, (id_m, id_personagem, x_padrao,y_padrao))
+
+        connection.commit()
+
+    except Exception as e:
+        # Desfaz a transação em caso de erro
+        connection.rollback()
+        print(f"Erro ao setar a posição inicial do personagem: {e}")
         return None
 
 def criar_mundo(connection, nome_mundo,tamanho_mundo,dificuldade_mundo):
@@ -100,6 +122,6 @@ def criar_mundo(connection, nome_mundo,tamanho_mundo,dificuldade_mundo):
 
     except Exception as e:
         # Desfaz a transação em caso de erro
-        conn.rollback()
+        connection.rollback()
         print(f"Erro ao criar novo mundo: {e}")
         return None
