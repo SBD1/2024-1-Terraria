@@ -29,7 +29,7 @@ class player:
         self.game_over = False
 myPlayer = player()
 
-global ID_PC
+ID_PC = 0
 ID_M = None
 
 
@@ -251,10 +251,6 @@ zonemap = {
 
 }
 
-def print_location():
-    print('#' + myPlayer. location.upper() + '#')
-    print('#' + zonemap [myPlayer.location] [DESCRIPTION] + '#')
-
 
 def prompt():
     print("\n" + "===============================")
@@ -276,29 +272,46 @@ def player_move(myAction):
     ask= "Where would you like to move to?\n"
     dest = input (ask)
     if dest in ['up', 'north']:
-        destination = zonemap [myPlayer. location] [UP]
-        movement_handler(destination)
+        movement_handler(1, 'y')
     elif dest in ['left', 'west']:
-        destination = zonemap [myPlayer. location] [LEFT]
-        movement_handler(destination)
+        movement_handler(-1, 'x')
     elif dest in ['east', 'right']:
-        destination = zonemap [myPlayer. location] [RIGHT]
-        movement_handler(destination)
+        movement_handler(1, 'x')
     elif dest in ['south', 'down']:
-        destination = zonemap [myPlayer. location] [DOWN]
-        movement_handler(destination)
+        movement_handler(-1, 'y')
 
-def movement_handler(destination):
+def movement_handler(ammount, side):
+    global ID_PC
     encontro = ''
-    if destination == "":
+    print(ID_PC)
+    cur.execute('SELECT x, y from posicao where id_personagem = (%s)', [ID_PC])
+    posicao = cur.fetchall()
+    x = posicao[0][0]
+    y = posicao[0][1]
+    print(x, y)
+    if ammount == 1 and side == 'y' and y == 4:
+        print("Cant go any futher in this direction!")
+    elif ammount == 1 and side == 'x' and x == 4:
+        print("Cant go any futher in this direction!")
+    elif ammount == -1 and side == 'y' and y == 1:
+        print("Cant go any futher in this direction!")
+    elif ammount == -1 and side == 'x' and x == 1:
         print("Cant go any futher in this direction!")
     else:
-        print("\n" + "You have moved to the " + destination + ".")
-        myPlayer. location = destination
-        x = int(destination[0])
-        y = int(destination[1])
-        print(x, y)
-
+        if ammount > 0:
+            if side == 'x':
+                print('direita')
+                x = x + 1
+            if side == 'y':
+                print('cima')
+                y = y + 1
+        if ammount < 0:
+            if side == 'x':
+                print('esquerda')
+                x = x - 1
+            if side == 'y':
+                print('baixo')
+                y = y - 1
         '''
         Tratamentos Encontros:
         if x == 1:
@@ -328,9 +341,9 @@ def movement_handler(destination):
         '''
               
         
-        cur.execute('UPDATE posicao SET x = (%s), y = (%s) WHERE id_personagem = 1',(x, y))
+        cur.execute('UPDATE posicao SET x = (%s), y = (%s) WHERE id_personagem = (%s)',(x, y, ID_PC))
         connection.commit()
-        print_location()
+        print("\n" + "You have moved to the " + str(x) + str(y) + ".")
 
 def player_examine(action):
     if zonemap[myPlayer. location][SOLVED]:
@@ -358,6 +371,7 @@ def setup_game():
 
 
 def personagem_handler():
+    global ID_PC
     # Verifica se a tabela pc está vazia
     cur.execute("SELECT COUNT(*) FROM pc;")
     pc_count = cur.fetchone()[0]
