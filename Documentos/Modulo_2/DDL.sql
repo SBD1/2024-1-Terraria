@@ -1,5 +1,5 @@
  -- Drop das tabelas, se existirem
-DROP TABLE IF EXISTS Instancia_NPC, NPC, Instancia_PC, PC, Dialogo, Personagem, Bioma, Mundo, Evento, Consumivel, Roupa, Acessorio, Ferramenta, Item, Modificador, Buff, Possui, Acontece, Contem, Solta, Faz_Parte_Bioma, Requer, Roupa_Tem, Acessorio_Tem, Ferramenta_Tem, Fornece, Bloco, Receita, Posicao, Faz_Parte_NPC;
+DROP TABLE IF EXISTS Instancia_NPC, NPC, Instancia_PC, PC, Dialogo, Personagem, Bioma, Mundo, Evento, Consumivel, Roupa, Acessorio, Ferramenta, Item, Modificador, Buff, Possui, Acontece, Contem, Solta, Faz_Parte_Bioma, Requer, Roupa_Tem, Acessorio_Tem, Ferramenta_Tem, Fornece, Bloco, Receita, Posicao, Faz_Parte_NPC, Instancia_Mundo;
 DROP TYPE IF EXISTS Tamanho, Dificuldade, Tipo_Evento;
 -- Criação das tabelas
 
@@ -258,5 +258,6 @@ CREATE TABLE Instancia_Mundo (
     d2 VARCHAR(255),
     d3 VARCHAR(255),
     d4 VARCHAR(255),
+    FOREIGN KEY (ID_PC) REFERENCES PC(ID_PC)
 );
 

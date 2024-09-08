@@ -58,6 +58,14 @@ VALUES ('Mundo da Esperança', 'Medio', 112233, 'Normal', 6, 1200);
 INSERT INTO Mundo (Nome, Tamanho, Semente, Dificuldade, Clima, Hora_do_Dia)
 VALUES ('Mundo das Sombras', 'Pequeno', 445566, 'Jornada', 5, 2400);
 
+--inserindo instancias_mundo
+INSERT INTO Instancia_Mundo (ID_PC, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4)
+VALUES 
+(1, NULL, 'zumbi', 'zumbi', 'minerio', 'npc', 'item', 'slime', 'slime', 'zumbi', 'slime', 'zumbi', 'minerio', 'item', 'tesouro', 'npc', 'minerio'),
+(2, NULL, 'slime', 'minerio', 'zumbi', 'npc', 'tesouro', 'item', 'slime', 'zumbi', 'minerio', 'npc', 'zumbi', 'item', 'zumbi', 'minerio', 'slime'),
+(3, NULL, 'minerio', 'zumbi', 'tesouro', 'slime', 'npc', 'zumbi', 'item', 'npc', 'zumbi', 'minerio', 'slime', 'slime', 'zumbi', 'item', 'minerio'),
+(4, NULL, 'npc', 'zumbi', 'item', 'slime', 'minerio', 'npc', 'tesouro', 'item', 'zumbi', 'slime', 'minerio', 'zumbi', 'npc', 'zumbi', 'tesouro');
+
 -- Inserindo eventos
 INSERT INTO Evento (Nome, Tipo, Data_Inicio, Data_Fim)
 VALUES ('Eclipse Solar', 'Aleatorio', '2024-02-15', '2024-02-15');

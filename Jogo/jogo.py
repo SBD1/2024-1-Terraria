@@ -29,7 +29,7 @@ class player:
         self.game_over = False
 myPlayer = player()
 
-ID_PC = 0
+global ID_PC
 
 
 ##### Title Screen #####
@@ -359,7 +359,7 @@ def setup_game():
             print("Já existem alguns personagens, deseja escolher algum?")
             # Recupera os personagens existentes e suas respectivas vidas e manas atuais
             cur.execute("""
-                SELECT personagem.nome, instancia_pc.vidaAtual, instancia_pc.manaAtual
+                SELECT personagem.nome, instancia_pc.vidaAtual, instancia_pc.manaAtual, pc.id_pc
                 FROM personagem
                 JOIN pc ON personagem.id_p = pc.id_personagem
                 JOIN instancia_pc ON pc.id_pc = instancia_pc.id_pc;
@@ -367,8 +367,8 @@ def setup_game():
             personagens = cur.fetchall()
 
             print("Personagens disponíveis:")
-            for idx, (nome, vida_atual, mana_atual) in enumerate(personagens, start=1):
-                print(f"{idx}. Nome: {nome}, Vida Atual: {vida_atual}, Mana Atual: {mana_atual}")
+            for idx, (nome, vida_atual, mana_atual, id_pc) in enumerate(personagens, start=1):
+                print(f"{idx}. Nome: {nome}, Vida Atual: {vida_atual}, Mana Atual: {mana_atual}, ID_PC: {id_pc}")
 
             # Pergunta ao jogador qual personagem ele deseja usar
             escolha = input("Digite o número do personagem que você deseja utilizar ou '0' para criar um novo personagem: ")
