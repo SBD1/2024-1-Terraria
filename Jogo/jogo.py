@@ -392,12 +392,16 @@ def encontro_handler(encontro, sala):
                 RETURNING id_instancia_npc;
             """, (id_npc, vidaMonstro, encontro))
         id_instancia = cur.fetchone()[0]
-        cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc and (%s) = item_nome""", (ID_PC, "Braco de zumbi"))
-        arma = cur.fetchone()[0]
-        if arma > 0:
-            equipado = True
-        else:
-            equipado = False
+        
+        cur.execute("""SELECT MAX(poder) FROM ferramenta
+                    JOIN contem ON contem.id_instancia_pc = (%s)
+                     WHERE ferramenta.item_nome = contem.item_nome""", [ID_PC])
+        dano = cur.fetchone()[0]
+        if dano == None:
+            dano = 10
+        print(dano)
+
+      
         dialogo = "Você encontrou um " + encontro + ", Prepare-se para o combate"
         display_text(dialogo)
         
@@ -406,70 +410,39 @@ def encontro_handler(encontro, sala):
                 dialogo = "O que você vai fazer:"
                 display_text(dialogo)
                 escolha = input("Atacar ou Fugir?")
+
                 if escolha.lower() == "atacar":
-                    if equipado:
-                        vidaMonstro = vidaMonstro - 45
-                        display_text("Você deu 45 de dano no " + encontro)
-                        display_text("Ele tem " + str(vidaMonstro) + ' de vida sobrando')
-                        if vidaMonstro <= 0:
-                            luta = False
-                            cur.execute('DELETE FROM instancia_npc WHERE id_instancia_npc = (%s)', [id_instancia])
-                            cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
-                            if encontro == 'zumbi':
-                                if random.random() < 0.5:
-                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Braco de zumbi"))
-                                    tem_braco = cur.fetchone()[0]
-                                    if tem_braco == 0:
-                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Braco de zumbi", ID_PC, 1))
-                                    else:
-                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Braco de zumbi", ID_PC))
+                    vidaMonstro = vidaMonstro - dano
+                    display_text("Você deu "+ str(dano) +" de dano no " + encontro)
+                    display_text("Ele tem " + str(vidaMonstro) + ' de vida sobrando')
+                    if vidaMonstro <= 0:
+                        luta = False
+                        cur.execute('DELETE FROM instancia_npc WHERE id_instancia_npc = (%s)', [id_instancia])
+                        cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
+                        if encontro == 'zumbi':
+                            if random.random() < 0.5:
+                                cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Braco de zumbi"))
+                                tem_braco = cur.fetchone()[0]
+                                if tem_braco == 0:
+                                    cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Braco de zumbi", ID_PC, 1))
+                                else:
+                                    cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Braco de zumbi", ID_PC))
 
-                                    display_text("Braço de zumbi dropou")
-                            if encontro == 'slime':
-                                if random.random() < 1:
-                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Gel"))
-                                    tem_braco = cur.fetchone()[0]
-                                    if tem_braco == 0:
-                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Gel", ID_PC, 1))
-                                    else:
-                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Gel", ID_PC))
+                                display_text("Braço de zumbi dropou")
+                        if encontro == 'slime':
+                            if random.random() < 1:
+                                cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Gel"))
+                                tem_braco = cur.fetchone()[0]
+                                if tem_braco == 0:
+                                    cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Gel", ID_PC, 1))
+                                else:
+                                    cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Gel", ID_PC))
 
-                                    display_text("Gel dropou")
-                        else:
-                            cur.execute('UPDATE instancia_npc SET vidaatual = (%s) WHERE id_instancia_npc = (%s)',(vidaMonstro, id_instancia))
-                            turno = 0
+                                display_text("Gel dropou")
                     else:
-                        vidaMonstro = vidaMonstro - 10
-                        display_text("Você deu 10 de dano no " + encontro)
-                        display_text("Ele tem " + str(vidaMonstro) + ' de vida sobrando')
-                        if vidaMonstro <= 0:
-                            luta = False
-                            cur.execute('DELETE FROM instancia_npc WHERE id_instancia_npc = (%s)', [id_instancia])
-                            cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
-                            if encontro == 'zumbi':
-                                if random.random() < 0.5:
-                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Braco de zumbi"))
-                                    tem_braco = cur.fetchone()[0]
-                                    if tem_braco == 0:
-                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Braco de zumbi", ID_PC, 1))
-                                    else:
-                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Braco de zumbi", ID_PC))
-
-                                    display_text("Braço de zumbi dropou")
-                            if encontro == 'slime':
-                                if random.random() < 1:
-                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Gel"))
-                                    tem_braco = cur.fetchone()[0]
-                                    if tem_braco == 0:
-                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Gel", ID_PC, 1))
-                                    else:
-                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Gel", ID_PC))
-
-                                    display_text("Gel dropou")
-                        else:
-                            cur.execute('UPDATE instancia_npc SET vidaatual = (%s) WHERE id_instancia_npc = (%s)',(vidaMonstro, id_instancia))
-                            turno = 0
-
+                        cur.execute('UPDATE instancia_npc SET vidaatual = (%s) WHERE id_instancia_npc = (%s)',(vidaMonstro, id_instancia))
+                        turno = 0
+                    
                 if escolha.lower() == 'fugir':
                     luta = False
                     ammount = random.choice([1, -1])
