@@ -361,6 +361,19 @@ def encontro_handler(encontro, sala):
                     """, [encontro])
         dialogo = cur.fetchone()[0]
         display_text(dialogo)
+        if encontro == 'enfermeira':
+            cur.execute('SELECT vidaatual FROM instancia_pc WHERE id_pc = (%s)', [ID_PC])
+            vidaPlayer = cur.fetchone()[0]
+            display_text(f"Você gostaria de se curar? Sua vida está em {vidaPlayer}")
+            resposta = input("Sim ou nao?\n")
+            if resposta.lower() == 'sim':
+                display_text("Isso vai demorar só um segundo")
+                cur.execute(f'UPDATE instancia_pc SET vidaatual = {100} WHERE id_pc = {ID_PC}')
+                display_text("Sua vida agora é 100")
+            else:
+                display_text("Ok, tenha uma boa aventura!")
+        connection.commit()
+
 
     elif encontro in Combate:
         turno = 1
