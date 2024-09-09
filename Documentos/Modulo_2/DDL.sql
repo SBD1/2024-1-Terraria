@@ -79,7 +79,12 @@ CREATE TABLE Evento (
 CREATE TABLE Item (
     Nome VARCHAR(255) PRIMARY KEY,
     Tipo VARCHAR(50) NOT NULL,
-    Acumulavel BOOLEAN NOT NULL
+    Acumulavel BOOLEAN NOT NULL,
+    Quantidade INT,
+    CHECK (
+        (Acumulavel = TRUE AND Quantidade >= 0) OR 
+        (Acumulavel = FALSE AND Quantidade = 1)
+    )
 );
 
 CREATE TABLE Consumivel (
