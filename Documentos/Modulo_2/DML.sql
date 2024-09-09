@@ -1,46 +1,30 @@
 -- Inserindo diálogos
-INSERT INTO Dialogo (Texto) VALUES ('Que dia lindo para uma aventura!');
-INSERT INTO Dialogo (Texto) VALUES ('Parece que uma tempestade está se aproximando.');
-INSERT INTO Dialogo (Texto) VALUES ('Cuidado, não vá muito longe na floresta!');
-INSERT INTO Dialogo (Texto) VALUES ('Voce ouviu aquele som? Algo está se aproximando...');
+INSERT INTO Dialogo (Texto) VALUES ('Você precisa de um pouco de equipamento melhor para enfrentar esses monstros!');
+INSERT INTO Dialogo (Texto) VALUES ('Eu tenho o que você precisa, se você tiver o dinheiro hehehe....');
+INSERT INTO Dialogo (Texto) VALUES ('Você precisa de um pouco de cura? Eu posso te ajudar com isso!');
 
 -- Inserindo personagens
-INSERT INTO Personagem (Nome, Vida) VALUES ('Guerreiro', 300);
-INSERT INTO Personagem (Nome, Vida) VALUES ('Espectro', 150);
-INSERT INTO Personagem (Nome, Vida) VALUES ('Dragão', 500);
-INSERT INTO Personagem (Nome, Vida) VALUES ('Mago', 200);
+INSERT INTO Personagem (Nome, Vida) VALUES ('zumbi', 45);
+INSERT INTO Personagem (Nome, Vida) VALUES ('slime', 14);
+INSERT INTO Personagem (Nome, Vida) VALUES ('guia', 100);
+INSERT INTO Personagem (Nome, Vida) VALUES ('mercador', 100); 
+INSERT INTO Personagem (Nome, Vida) VALUES ('enfermeira', 100); 
 
 -- Inserindo NPCs
 INSERT INTO NPC (ID_Personagem, Tipo, Comportamento, ID_Dialogo)
-VALUES (1, 'Guerreiro', 'Defende a vila', 1);
+VALUES (1, 'zumbi', 'Ataca a Primeira Vista', NULL);
 INSERT INTO NPC (ID_Personagem, Tipo, Comportamento, ID_Dialogo)
-VALUES (2, 'Espectro', 'Ataca à noite', 2);
+VALUES (2, 'slime', 'Ataca a Primeira Vista', NULL);
 INSERT INTO NPC (ID_Personagem, Tipo, Comportamento, ID_Dialogo)
-VALUES (3, 'Dragão', 'Guardião da montanha', 3);
+VALUES (3, 'guia', 'Ajuda o Jogador', 1);
 INSERT INTO NPC (ID_Personagem, Tipo, Comportamento, ID_Dialogo)
-VALUES (4, 'Mago', 'Conselheiro sábio', 4);
+VALUES (4, 'mercador', 'Vende Itens', 2);
+INSERT INTO NPC (ID_Personagem, Tipo, Comportamento, ID_Dialogo)
+VALUES (5, 'enfermeira', 'Cura o Jogador', 3);
 
--- Inserindo PCs
-INSERT INTO PC (ID_Personagem, Mana) VALUES (1, 250);
-INSERT INTO PC (ID_Personagem, Mana) VALUES (2, 180);
-INSERT INTO PC (ID_Personagem, Mana) VALUES (3, 300);
-INSERT INTO PC (ID_Personagem, Mana) VALUES (4, 350);
+-- Inserindo PC
 
 -- Inserindo instâncias de PC
-INSERT INTO Instancia_PC (VidaAtual, ManaAtual, ID_PC) VALUES (270, 200, 1);
-INSERT INTO Instancia_PC (VidaAtual, ManaAtual, ID_PC) VALUES (260, 150, 2);
-INSERT INTO Instancia_PC (VidaAtual, ManaAtual, ID_PC) VALUES (500, 250, 3);
-INSERT INTO Instancia_PC (VidaAtual, ManaAtual, ID_PC) VALUES (180, 320, 4);
-
--- Inserindo instâncias de NPC
-INSERT INTO Instancia_NPC (ID_NPC, VidaAtual, Nome)
-VALUES (1, 290, 'Guerreiro');
-INSERT INTO Instancia_NPC (ID_NPC, VidaAtual, Nome)
-VALUES (2, 140, 'Espectro');
-INSERT INTO Instancia_NPC (ID_NPC, VidaAtual, Nome)
-VALUES (3, 450, 'Dragão');
-INSERT INTO Instancia_NPC (ID_NPC, VidaAtual, Nome)
-VALUES (4, 190, 'Mago');
 
 -- Inserindo biomas
 INSERT INTO Bioma (Nome, Tipo) VALUES ('Pântano', 'Natural');
@@ -59,12 +43,8 @@ INSERT INTO Mundo (Nome, Tamanho, Semente, Dificuldade, Clima, Hora_do_Dia)
 VALUES ('Mundo das Sombras', 'Pequeno', 445566, 'Jornada', 5, 2400);
 
 --inserindo instancias_mundo
-INSERT INTO Instancia_Mundo (ID_PC, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4)
-VALUES 
-(1, NULL, 'zumbi', 'zumbi', 'minerio', 'npc', 'item', 'slime', 'slime', 'zumbi', 'slime', 'zumbi', 'minerio', 'item', 'tesouro', 'npc', 'minerio'),
-(2, NULL, 'slime', 'minerio', 'zumbi', 'npc', 'tesouro', 'item', 'slime', 'zumbi', 'minerio', 'npc', 'zumbi', 'item', 'zumbi', 'minerio', 'slime'),
-(3, NULL, 'minerio', 'zumbi', 'tesouro', 'slime', 'npc', 'zumbi', 'item', 'npc', 'zumbi', 'minerio', 'slime', 'slime', 'zumbi', 'item', 'minerio'),
-(4, NULL, 'npc', 'zumbi', 'item', 'slime', 'minerio', 'npc', 'tesouro', 'item', 'zumbi', 'slime', 'minerio', 'zumbi', 'npc', 'zumbi', 'tesouro');
+--INSERT INTO Instancia_Mundo (ID_PC, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4)
+--VALUES (1, NULL, 'zumbi', 'zumbi', 'minerio', 'npc', 'item', 'slime', 'slime', 'zumbi', 'slime', 'zumbi', 'minerio', 'item', 'tesouro', 'npc', 'minerio'),
 
 -- Inserindo eventos
 INSERT INTO Evento (Nome, Tipo, Data_Inicio, Data_Fim)
@@ -82,6 +62,7 @@ INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Pocao de Agilidade', 'Consumi
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Pocao de Cura', 'Consumivel', TRUE);
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Pocao de Mana', 'Consumivel', TRUE);
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Flecha', 'Consumivel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Gel', 'Consumivel', TRUE);
 
 -- Itens para Roupa
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Elmo de Aço', 'Equipavel', TRUE);
@@ -105,6 +86,7 @@ INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Martelo de Prata', 'Ferrament
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Arco de Madeira', 'Ferramenta', TRUE);
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Diamante', 'Arma', FALSE);
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Ferro', 'Arma', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Braco de zumbi', 'Arma', FALSE);
 
 -- Itens para Bloco
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Bloco de Madeira', 'Bloco', TRUE);
@@ -130,6 +112,7 @@ INSERT INTO Consumivel (Item_Nome) VALUES ('Pocao de Resistencia ao Fogo');
 INSERT INTO Consumivel (Item_Nome) VALUES ('Pocao de Agilidade');
 INSERT INTO Consumivel (Item_Nome) VALUES ('Pocao de Cura');
 INSERT INTO Consumivel (Item_Nome) VALUES ('Pocao de Mana');
+INSERT INTO Consumivel (Item_Nome) VALUES ('Gel');
 
 -- Inserindo roupas
 INSERT INTO Roupa (Defesa, Descricao, eAperencia, Item_Nome)
@@ -170,6 +153,8 @@ INSERT INTO Ferramenta (Tipo, Poder, Eficiencia, ChanceCrit, Item_Nome)
 VALUES ('Espada', 70, 0, 4, 'Espada de Ferro');
 INSERT INTO Ferramenta (Tipo, Poder, Eficiencia, ChanceCrit, Item_Nome)
 VALUES ('Espada', 100, 0, 4, 'Espada de Diamante');
+INSERT INTO Ferramenta (Tipo, Poder, Eficiencia, ChanceCrit, Item_Nome)
+VALUES ('Braco', 10, 0, 4, 'Braco de zumbi');
 
 -- Inserindo modificadores
 INSERT INTO Modificador (Nome, Efeito)
@@ -228,16 +213,6 @@ VALUES ('Armadura de Ouro', 'Ouro', 'Couro', 'Tecido', 20, 10, 5, 'Forja');
 INSERT INTO Receita (Item_Final, Item_1, Quantidade_Item_1, Estacao_Bloco)
 VALUES ('Capa Magica', 'Tecido', 2, 'Estante do Mago');
 
--- Inserindo posições
-INSERT INTO Posicao (ID_Mundo, ID_Personagem, X, Y)
-VALUES (2, 1, 300, 400);
-INSERT INTO Posicao (ID_Mundo, ID_Personagem, X, Y)
-VALUES (3, 2, 500, 600);
-INSERT INTO Posicao (ID_Mundo, ID_Personagem, X, Y)
-VALUES (4, 3, 700, 800);
-INSERT INTO Posicao (ID_Mundo, ID_Personagem, X, Y)
-VALUES (1, 4, 900, 1000);
-
 -- Inserindo relações 'Possui'
 INSERT INTO Possui (ID_Mundo, Bioma_Nome)
 VALUES (2, 'Pântano');
@@ -259,24 +234,14 @@ INSERT INTO Acontece (Evento_Nome, ID_Mundo)
 VALUES ('Chuva de Meteoros', 4);
 
 -- Inserindo conteúdos em Instancia_PC
-INSERT INTO Contem (Item_Nome, ID_Instancia_PC, Quantidade)
-VALUES ('Flecha', 3, 50);
-INSERT INTO Contem (Item_Nome, ID_Instancia_PC, Quantidade)
-VALUES ('Pocao de Resistencia ao Fogo', 4, 2);
-INSERT INTO Contem (Item_Nome, ID_Instancia_PC, Quantidade)
-VALUES ('Arco de Madeira', 2, 1);
-INSERT INTO Contem (Item_Nome, ID_Instancia_PC, Quantidade)
-VALUES ('Machado de Ferro', 1, 1);
+--INSERT INTO Contem (Item_Nome, ID_Instancia_PC, Quantidade)
+--VALUES ('Flecha', 3, 50);
 
 -- Inserindo itens soltos por NPCs
-INSERT INTO Solta (Item_Nome, ID_Instancia_NPC)
-VALUES ('Elmo de Aço', 1);
-INSERT INTO Solta (Item_Nome, ID_Instancia_NPC)
-VALUES ('Machado de Ferro', 2);
-INSERT INTO Solta (Item_Nome, ID_Instancia_NPC)
-VALUES ('Colar de Fogo', 3);
-INSERT INTO Solta (Item_Nome, ID_Instancia_NPC)
-VALUES ('Anel de Velocidade', 4);
+INSERT INTO Solta (Item_Nome, ID_NPC)
+VALUES ('Braco de zumbi', 1);
+INSERT INTO Solta (Item_Nome, ID_NPC)
+VALUES ('Gel', 2);
 
 -- Inserindo partes de biomas
 INSERT INTO Faz_Parte_Bioma (Item_Nome, Bioma_Nome)

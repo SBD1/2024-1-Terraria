@@ -19,7 +19,7 @@ CREATE TABLE NPC (
     ID_Personagem INT NOT NULL,
     Tipo VARCHAR(50) NOT NULL,
     Comportamento VARCHAR(255) NOT NULL,
-    ID_Dialogo INT NOT NULL,
+    ID_Dialogo INT,
     PRIMARY KEY (ID_NPC),
     FOREIGN KEY (ID_Dialogo) REFERENCES Dialogo(ID_Dialogo),
     FOREIGN KEY (ID_Personagem) REFERENCES Personagem(ID_P)
@@ -186,9 +186,9 @@ CREATE TABLE Contem (
 
 CREATE TABLE Solta (
     Item_Nome VARCHAR(255) NOT NULL,
-    ID_Instancia_NPC INT NOT NULL,
+    ID_NPC INT NOT NULL,
     FOREIGN KEY (Item_Nome) REFERENCES Item(Nome),
-    FOREIGN KEY (ID_Instancia_NPC) REFERENCES Instancia_NPC(ID_Instancia_NPC)
+    FOREIGN KEY (ID_NPC) REFERENCES NPC(ID_NPC)
 );
 
 CREATE TABLE Faz_Parte_Bioma (

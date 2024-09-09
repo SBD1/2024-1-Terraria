@@ -51,6 +51,14 @@ def criar_personagem_jogavel(connection, nome_personagem):
                 VALUES (%s, %s, %s)
                 RETURNING id_instancia_pc;
             """, (id_pc, vida_atual, mana_atual))
+
+            mundo = ['enfermeira', 'minerio', 'zumbi', 'guia', 'tesouro', 'item', 'slime', 'zumbi', 'minerio', 'mercador', 'zumbi', 'item', 'zumbi', 'minerio', 'slime']
+            random.shuffle(mundo)
+
+            cur.execute(""" 
+                INSERT INTO instancia_mundo (ID_PC, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (id_pc, None, mundo[0], mundo[1], mundo[2], mundo[3], mundo[4], mundo[5], mundo[6], mundo[7], mundo[8], mundo[9], mundo[10], mundo[11], mundo[12], mundo[13], mundo[14]))
             
             # Confirma a transação
             connection.commit()

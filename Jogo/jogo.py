@@ -18,16 +18,7 @@ screen_width = 100
 cur.execute('SELECT x, y from posicao where id_personagem = 1')
 teste = cur.fetchall()
 
-class player:
-    def __init__(self):
-        self.name = ''
-        self.job = ''
-        self.hp = 0
-        self.mp = 0
-        self.status_effects = []
-        self.location =  str(teste[0][0]) + str(teste[0][1])
-        self.game_over = False
-myPlayer = player()
+
 
 ID_PC = 0
 ID_M = None
@@ -283,12 +274,17 @@ def player_move(myAction):
 def movement_handler(ammount, side):
     global ID_PC
     encontro = ''
-    print(ID_PC)
-    cur.execute('SELECT x, y from posicao where id_personagem = (%s)', [ID_PC])
+    cur.execute("""
+            SELECT id_p FROM personagem
+            JOIN pc ON id_p = id_personagem
+            WHERE id_pc = (%s)
+        """, (ID_PC,))
+    id_personagem = cur.fetchone()[0]
+    cur.execute('SELECT x, y from posicao where id_personagem = (%s)', [id_personagem])
     posicao = cur.fetchall()
+
     x = posicao[0][0]
     y = posicao[0][1]
-    print(x, y)
     if ammount == 1 and side == 'y' and y == 4:
         print("Cant go any futher in this direction!")
     elif ammount == 1 and side == 'x' and x == 4:
@@ -312,51 +308,222 @@ def movement_handler(ammount, side):
             if side == 'y':
                 print('baixo')
                 y = y - 1
-        '''
-        Tratamentos Encontros:
-        if x == 1:
-            sala = 'a' + str(y)
-            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
-            encontro = cur.fetchall()
-            if encontro:
-                encotro_handler(encontro)
-        if x == 2:
-            sala = 'b' + str(y)
-            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
-            encontro = cur.fetchall()
-            if encontro:
-                encotro_handler(encontro)
-        if x == 3:
-            sala = 'c' + str(y)
-            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
-            encontro = cur.fetchall()
-            if encontro:
-                encotro_handler(encontro)
-        if x == 4:
-            sala = 'd' + str(y)
-            cur.execute("SELECT (%s) FROM Instancia_Mundo where ID_PC = (%s);", sala, ID_PC)
-            encontro = cur.fetchall()
-            if encontro:
-                encotro_handler(encontro)
-        '''
-              
-        
-        cur.execute('UPDATE posicao SET x = (%s), y = (%s) WHERE id_personagem = (%s)',(x, y, ID_PC))
+
+
+        cur.execute('UPDATE posicao SET x = (%s), y = (%s) WHERE id_personagem = (%s)',(x, y, id_personagem))
         connection.commit()
         print("\n" + "You have moved to the " + str(x) + str(y) + ".")
 
-def player_examine(action):
-    if zonemap[myPlayer. location][SOLVED]:
-        print("Zone exausted.")
-    else:
-        print('')
+        if x == 1:
+            sala = 'a' + str(y)
+            cur.execute("SELECT " + sala + " FROM instancia_Mundo where id_pc = (%s);", [ID_PC])
+            encontro = cur.fetchone()[0]
+            if encontro != None:
+                encontro_handler(encontro, sala)
+            else:
+                print("Não tem nada nessa sala")
+        if x == 2:
+            sala = 'b' + str(y)
+            cur.execute("SELECT " + sala + " FROM instancia_Mundo where id_pc = (%s);", [ID_PC])
+            encontro = cur.fetchone()[0]
+            if encontro != None:
+                encontro_handler(encontro, sala)
+            else:
+                print("Não tem nada nessa sala")
+        if x == 3:
+            sala = 'c' + str(y)
+            cur.execute("SELECT " + sala + " FROM instancia_Mundo where id_pc = (%s);", [ID_PC])
+            encontro = cur.fetchone()[0]
+            if encontro != None:
+                encontro_handler(encontro, sala)
+            else:
+                print("Não tem nada nessa sala")
+        if x == 4:
+            sala = 'd' + str(y)
+            cur.execute("SELECT " + sala + " FROM instancia_Mundo where id_pc = (%s);", [ID_PC])
+            encontro = cur.fetchone()[0]
+            if encontro != None:
+                encontro_handler(encontro, sala)
+            else:
+                print("Não tem nada nessa sala")
+        
+def encontro_handler(encontro, sala):
+    print(encontro)
+
+    Combate = ['slime', 'zumbi']
+    npc = ['guia', 'mercador', 'enfermeira']
+    item = ['minerio', 'item', 'tesouro']
+
+    if encontro in npc:
+        cur.execute("""SELECT texto FROM dialogo 
+                    JOIN npc ON tipo = (%s) 
+                    WHERE dialogo.id_dialogo = npc.id_dialogo
+                    """, [encontro])
+        dialogo = cur.fetchone()[0]
+        display_text(dialogo)
+
+    elif encontro in Combate:
+        turno = 1
+        luta = True
+        cur.execute("""SELECT id_npc FROM npc WHERE (%s) = tipo""", [encontro])
+        id_npc = cur.fetchone()[0]
+        cur.execute("""SELECT vida FROM personagem WHERE (%s) = nome""", [encontro])
+        vidaMonstro = cur.fetchone()[0]
+        cur.execute('SELECT vidaatual FROM instancia_pc WHERE id_pc = (%s)', [ID_PC])
+        vidaPlayer = cur.fetchone()[0]
+        cur.execute("""
+                INSERT INTO instancia_npc (id_npc, vidaatual, nome)
+                VALUES (%s, %s, %s)
+                RETURNING id_instancia_npc;
+            """, (id_npc, vidaMonstro, encontro))
+        id_instancia = cur.fetchone()[0]
+        cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc and (%s) = item_nome""", (ID_PC, "Braco de zumbi"))
+        arma = cur.fetchone()[0]
+        if arma > 0:
+            equipado = True
+        else:
+            equipado = False
+        dialogo = "Você encontrou um " + encontro + ", Prepare-se para o combate"
+        display_text(dialogo)
+        
+        while luta == True:
+            if turno == 1:
+                dialogo = "O que você vai fazer:"
+                display_text(dialogo)
+                escolha = input("Atacar ou Fugir?")
+                if escolha.lower() == "atacar":
+                    if equipado:
+                        vidaMonstro = vidaMonstro - 45
+                        display_text("Você deu 45 de dano no " + encontro)
+                        display_text("Ele tem " + str(vidaMonstro) + ' de vida sobrando')
+                        if vidaMonstro <= 0:
+                            luta = False
+                            cur.execute('DELETE FROM instancia_npc WHERE id_instancia_npc = (%s)', [id_instancia])
+                            cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
+                            if encontro == 'zumbi':
+                                if random.random() < 0.5:
+                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Braco de zumbi"))
+                                    tem_braco = cur.fetchone()[0]
+                                    if tem_braco == 0:
+                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Braco de zumbi", ID_PC, 1))
+                                    else:
+                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Braco de zumbi", ID_PC))
+
+                                    display_text("Braço de zumbi dropou")
+                            if encontro == 'slime':
+                                if random.random() < 1:
+                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Gel"))
+                                    tem_braco = cur.fetchone()[0]
+                                    if tem_braco == 0:
+                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Gel", ID_PC, 1))
+                                    else:
+                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Gel", ID_PC))
+
+                                    display_text("Gel dropou")
+                        else:
+                            cur.execute('UPDATE instancia_npc SET vidaatual = (%s) WHERE id_instancia_npc = (%s)',(vidaMonstro, id_instancia))
+                            turno = 0
+                    else:
+                        vidaMonstro = vidaMonstro - 10
+                        display_text("Você deu 10 de dano no " + encontro)
+                        display_text("Ele tem " + str(vidaMonstro) + ' de vida sobrando')
+                        if vidaMonstro <= 0:
+                            luta = False
+                            cur.execute('DELETE FROM instancia_npc WHERE id_instancia_npc = (%s)', [id_instancia])
+                            cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
+                            if encontro == 'zumbi':
+                                if random.random() < 0.5:
+                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Braco de zumbi"))
+                                    tem_braco = cur.fetchone()[0]
+                                    if tem_braco == 0:
+                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Braco de zumbi", ID_PC, 1))
+                                    else:
+                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Braco de zumbi", ID_PC))
+
+                                    display_text("Braço de zumbi dropou")
+                            if encontro == 'slime':
+                                if random.random() < 1:
+                                    cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, "Gel"))
+                                    tem_braco = cur.fetchone()[0]
+                                    if tem_braco == 0:
+                                        cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", ("Gel", ID_PC, 1))
+                                    else:
+                                        cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", ("Gel", ID_PC))
+
+                                    display_text("Gel dropou")
+                        else:
+                            cur.execute('UPDATE instancia_npc SET vidaatual = (%s) WHERE id_instancia_npc = (%s)',(vidaMonstro, id_instancia))
+                            turno = 0
+
+                if escolha.lower() == 'fugir':
+                    luta = False
+                    ammount = random.choice([1, -1])
+                    side = random.choice(["x", "y"])
+                    cur.execute('DELETE FROM instancia_npc WHERE id_instancia_npc = (%s)', [id_instancia])
+                    movement_handler(ammount, side)
+                connection.commit()
+                
+                
+            else:
+                display_text("O "+ encontro + " Te ataca ")
+                if encontro == "zumbi":
+                    display_text("Você sofreu 14 de dano!!!")
+                    vidaPlayer = vidaPlayer - 14
+                    display_text("Sua vida é: " + str(vidaPlayer))
+                    if vidaPlayer <= 0:
+                        luta = False
+                        cur.execute('DELETE FROM instancia_pc WHERE id_pc = (%s)', [ID_PC])
+                        cur.execute('DELETE FROM pc WHERE id_pc = (%s)', [ID_PC])
+                        cur.execute("""
+                            SELECT id_p FROM personagem
+                            JOIN pc ON id_p = id_personagem
+                            WHERE id_pc = (%s)
+                        """, (ID_PC,))
+                        id_personagem = cur.fetchone()[0]
+                        cur.execute('DELETE FROM personagem WHERE id_p = (%s)', [id_personagem])
+                        display_text('Você perdeu o jogo, Comece de novo.')
+                        sys.exit()
+                    else:
+                        cur.execute('UPDATE instancia_pc SET vidaatual = (%s) WHERE id_pc = (%s)',(vidaPlayer, ID_PC))
+                        turno = 1
+                    if encontro == "slime":
+                        display_text("Você sofreu 7 de dano!!!")
+                        vidaPlayer = vidaPlayer - 7
+                        display_text("Sua vida é: " + str(vidaPlayer))
+                        if vidaPlayer <= 0:
+                            luta = False
+                            cur.execute('DELETE FROM instancia_pc WHERE id_pc = (%s)', [ID_PC])
+                            cur.execute('DELETE FROM pc WHERE id_pc = (%s)', [ID_PC])
+                            cur.execute("""
+                                SELECT id_p FROM personagem
+                                JOIN pc ON id_p = id_personagem
+                                WHERE id_pc = (%s)
+                            """, (ID_PC,))
+                            id_personagem = cur.fetchone()[0]
+                            cur.execute('DELETE FROM personagem WHERE id_p = (%s)', [id_personagem])
+                            display_text('Você perdeu o jogo, Comece de novo.')
+                            sys.exit()
+                        else:
+                            cur.execute('UPDATE instancia_pc SET vidaatual = (%s) WHERE id_pc = (%s)',(vidaPlayer, ID_PC))
+                            turno = 1
+                connection.commit()
+
+
+
+def display_text(texto):
+    texto = texto + "\n"
+    for character in texto:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.05)
+
 
 def start_game():
     return
 
 
 def main_game_loop():
-    while myPlayer.game_over is False:
+    while True:
         prompt()
 # here handle if puzzles have been solved, boss defeated, explored everything, etc.
 def setup_game():
