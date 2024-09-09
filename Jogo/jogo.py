@@ -247,7 +247,7 @@ def prompt():
     print("\n" + "===============================")
     print("What would you like to do?")
     action = input(">")
-    acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look']
+    acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look','craft','crafting','criar','criar item']
     while action.lower() not in acceptable_actions:
         print("Unknown action, try again.\n")
         action = input(">")
@@ -257,6 +257,8 @@ def prompt():
         player_move(action.lower())
     elif action. lower() in ['examine', 'inspect', 'interact', 'look']:
         print('Desenvolvimento')
+    elif action. lower() in ['craft','crafting','criar','criar item']:
+        escolher_receita()
 
 
 def player_move(myAction):
@@ -620,73 +622,53 @@ def mundo_handler():
     #mundo_criado = criar_mundo(connection, nome_mundo, tamanho_mundo, dificuldade_mundo)
     #print(f"Mundo criado: {mundo_criado}")
 
+# Função para listar todas as receitas
+def listar_receitas():
+    with connection.cursor() as cur:
+        cur.execute("""
+            SELECT ID_Receita, Item_Final, Item_1, Item_2, Item_3 
+            FROM Receita;
+        """)
+        receitas = cur.fetchall()
+
+        if not receitas:
+            print("Nenhuma receita encontrada.")
+            return None
+
+        # Listar receitas por índice
+        print("Receitas disponíveis:")
+        for index, receita in enumerate(receitas):
+            id_receita, item_final, item_1, item_2, item_3 = receita
+            itens = f"{item_1}"
+            if item_2:
+                itens += f", {item_2}"
+            if item_3:
+                itens += f", {item_3}"
+            print(f"{index + 1}. {item_final} (Ingredientes: {itens})")
+
+        return receitas
+
+# Função para permitir que o usuário escolha uma receita
+def escolher_receita():
+    receitas = listar_receitas()
+    if not receitas:
+        return
+
+    # Solicitar que o usuário escolha um índice
+    escolha = int(input("Escolha o número da receita que deseja fabricar: ")) - 1
+
+    if escolha < 0 or escolha >= len(receitas):
+        print("Índice inválido.")
+        return
+
+    # Recuperar a receita escolhida
+    id_receita = receitas[escolha][0]
+    print("id da receita escolhida: " + str(id_receita))
+
+    adicionar_itens_para_receita(connection,ID_PC,id_receita)
+
+    # Chamar a função de fabricar item
+    fabricar_item(connection, ID_PC, id_receita)
+
 
 title_screen()
-
-
-
-
-
-
-
-
-
-
-'''
-else:
-        print("Já existem alguns mundos criados, deseja escolher algum?")
-        # Recupera os personagens existentes e suas respectivas vidas e manas atuais
-        cur.execute("SELECT id_mundo, Nome, Tamanho, Dificuldade FROM Mundo;")
-        mundos = cur.fetchall()
-
-        # Caso existam mundos, listar os mundos com índices
-        print("Mundos existentes:")
-        for index, mundo in enumerate(mundos, start=1):
-            print(f"{index}. Nome: {mundo[1]}. Tamanho: {mundo[2]}. Dificuldade: {mundo[3]}")
-
-        # Perguntar ao usuário se deseja criar um novo ou escolher um existente
-        escolha = input(f"Escolha o índice do mundo (ou 0 para criar um novo): ")
-
-        try:
-            escolha = int(escolha)
-
-            if escolha == 0:
-                # Criar um novo mundo
-                nome_mundo = input("Digite o nome do mundo: ")
-                tamanho_mundo = input("Escolha o tamanho do mundo (Pequeno, Medio, Grande): ")
-                while tamanho_mundo not in ["Pequeno", "Medio", "Grande"]:
-                    print("Tamanho inválido.")
-                    tamanho_mundo = input("Escolha o tamanho do mundo (Pequeno, Medio, Grande): ")
-
-                dificuldade_mundo = input("Escolha a dificuldade (Jornada, Normal, Expert, Master): ")
-                while dificuldade_mundo not in ['Jornada', 'Normal', 'Expert', 'Master']:
-                    print("Dificuldade inválida.")
-                    dificuldade_mundo = input("Escolha a dificuldade (Jornada, Normal, Expert, Master): ")
-
-                ID_M = criar_mundo(connection, nome_mundo, tamanho_mundo, dificuldade_mundo)
-                print(ID_M)
-                #mundo_criado = criar_mundo(connection, nome_mundo, tamanho_mundo, dificuldade_mundo)
-                #print(f"Mundo criado: {mundo_criado}")
-
-            elif 1 <= escolha <= len(mundos):
-                # Puxar os atributos do mundo escolhido por índice
-                mundo_escolhido = mundos[escolha - 1]
-                id_mundo = mundo_escolhido[0]
-                ID_M = id_mundo
-
-                print(ID_M)
-
-                cur.execute("SELECT * FROM Mundo WHERE ID_Mundo = %s;", (id_mundo,))
-                mundo_selecionado = cur.fetchone()
-
-                if mundo_selecionado:
-                    nome_mundo, tamanho_mundo, semente_mundo, dificuldade_mundo, clima_mundo, hora_do_dia_mundo = mundo_selecionado[1:]
-                    print(f"Mundo escolhido: Nome={nome_mundo}, Tamanho={tamanho_mundo}, Semente={semente_mundo}, Dificuldade={dificuldade_mundo}, Clima={clima_mundo}, Hora do Dia={hora_do_dia_mundo}")
-                else:
-                    print("Mundo não encontrado.")
-            else:
-                print("Índice inválido.")
-
-        except ValueError:
-            print("Entrada inválida. Digite um número.")
-'''
