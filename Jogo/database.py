@@ -53,8 +53,30 @@ def criar_personagem_jogavel(connection, nome_personagem):
             """, (id_pc, vida_atual, mana_atual))
 
             mundo = ['enfermeira', 'minerio', 'zumbi', 'guia', 'tesouro', 'item', 'slime', 'zumbi', 'minerio', 'mercador', 'zumbi', 'item', 'zumbi', 'minerio', 'slime']
-            random.shuffle(mundo)
 
+            cur.execute('SELECT nome FROM item')
+            lista_itens = [row[0] for row in cur.fetchall()]
+            for i in range(len(mundo)):
+                if mundo[i] == 'item':
+                    temp = str(random.choice(lista_itens))
+                    mundo[i] = temp
+            
+            cur.execute("SELECT nome FROM item WHERE tipo = 'Material'")
+            lista_itens = [row[0] for row in cur.fetchall()]
+            for i in range(len(mundo)):
+                if mundo[i] == 'minerio':
+                    temp = str(random.choice(lista_itens))
+                    mundo[i] = temp
+
+            cur.execute("SELECT nome FROM item WHERE tipo = 'Ferramenta' OR tipo = 'Equipavel'")
+            lista_itens = [row[0] for row in cur.fetchall()]
+            for i in range(len(mundo)):
+                if mundo[i] == 'tesouro':
+                    temp = str(random.choice(lista_itens))
+                    mundo[i] = temp
+
+            random.shuffle(mundo)
+            print(mundo)
             cur.execute(""" 
                 INSERT INTO instancia_mundo (ID_PC, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)

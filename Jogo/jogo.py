@@ -22,6 +22,7 @@ teste = cur.fetchall()
 
 ID_PC = 0
 ID_M = None
+Lista_itens = []
 
 
 ##### Title Screen #####
@@ -34,7 +35,7 @@ def title_screen_selections():
     elif option. lower() == ("quit"):
         sys.exit()
     while option.lower() not in ['play', 'help', 'quit']:
-        print("Please enter a valid command.")
+        print("Entre um comando valido.")
         option = input("> ")
         if option.lower() == ("play"):
             setup_game() # placeholder until written
@@ -46,7 +47,7 @@ def title_screen_selections():
 def title_screen():
     #os.system('clear')
     print('############################')
-    print('# Welcome to the Text Terraria! #')
+    print('# Bem vindo ao Text Terraria! #')
     print('############################')
     print('- Play -')
     print('- Help -')
@@ -55,12 +56,13 @@ def title_screen():
     title_screen_selections()
     
 def help_menu():
-    print('# Welcome to the Text Terraria!') 
+    print('# Bem vindo ao Text Terraria!') 
     print('############################')
-    print('- Use up, down, left, right to move') 
-    print('-Type your commands to do them') 
-    print('Use "look" to inspect something') 
-    print('Good luck and have fun!') 
+    print('- Use up, down, left, right para se mover') 
+    print('-Digite seu comando para realizar-los') 
+    print('Use olhar para interagir com itens') 
+    print('Use craft para fazer itens novos')
+    print('Boa sorte e divirta-se!') 
     title_screen_selections()
 
 
@@ -78,174 +80,18 @@ solved_places = {'11': False, '12': False, '13': False, '14': False,
                  '31': False, '32': False, '33': False, '34': False,
                  '41': False, '42': False, '43': False, '44': False}
 
-zonemap = {
-    '11': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '',
-        DOWN: '21', 
-        LEFT: '' ,
-        RIGHT: '12'
-    },
-    '12': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '',
-        DOWN: '22', 
-        LEFT: '11' ,
-        RIGHT: '13'
-    },    
-    '13': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '',
-        DOWN: '23', 
-        LEFT: '12' ,
-        RIGHT: '14'
-    },    
-    '14': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '',
-        DOWN: '24', 
-        LEFT: '13' ,
-        RIGHT: ''
-    }, 
-    '21': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '11',
-        DOWN: '31', 
-        LEFT: '' ,
-        RIGHT: '22'
-    },
-    '22': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '12',
-        DOWN: '32', 
-        LEFT: '21' ,
-        RIGHT: '23'
-    },    
-    '23': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '13',
-        DOWN: '33', 
-        LEFT: '22' ,
-        RIGHT: '24'
-    },    
-    '24': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '14',
-        DOWN: '34', 
-        LEFT: '23' ,
-        RIGHT: ''
-    },
-    '31': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '21',
-        DOWN: '41', 
-        LEFT: '' ,
-        RIGHT: '32'
-    },
-    '32': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '22',
-        DOWN: '42', 
-        LEFT: '31' ,
-        RIGHT: '33'
-    },    
-    '33': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '23',
-        DOWN: '43', 
-        LEFT: '32' ,
-        RIGHT: '34'
-    },    
-    '34': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '24',
-        DOWN: '44', 
-        LEFT: '33' ,
-        RIGHT: ''
-    },
-    '41': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '31',
-        DOWN: '', 
-        LEFT: '' ,
-        RIGHT: '42'
-    },
-    '42': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '32',
-        DOWN: '', 
-        LEFT: '41' ,
-        RIGHT: '43'
-    },    
-    '43': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '33',
-        DOWN: '', 
-        LEFT: '42' ,
-        RIGHT: '43'
-    },    
-    '44': {
-        ZONENAME: 'Hall',
-        DESCRIPTION: 'description',
-        EXAMINATION: "examine",
-        SOLVED: False,
-        UP: '34',
-        DOWN: '', 
-        LEFT: '43' ,
-        RIGHT: ''
-    },                
-
-}
-
-
 def prompt():
     print("\n" + "===============================")
-    print("What would you like to do?")
+    display_text("O que você gostaria de fazer?")
+    cur.execute("""
+            SELECT id_p FROM personagem
+            JOIN pc ON id_p = id_personagem
+            WHERE id_pc = (%s)
+        """, (ID_PC,))
+    id_personagem = cur.fetchone()[0]
+    cur.execute("SELECT x, y FROM posicao WHERE id_personagem = (%s)", [id_personagem])
+    posicao = cur.fetchone()
+    display_text(f"Você está na posição x: {posicao[0]} y: {posicao[1]}")
     action = input(">")
     acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look','craft','crafting','criar','criar item']
     while action.lower() not in acceptable_actions:
@@ -253,24 +99,24 @@ def prompt():
         action = input(">")
     if action.lower() == 'quit':
         sys.exit()
-    elif action.lower() in ['move', 'go', 'travel', 'walk']:
+    elif action.lower() in ['move', 'go', 'travel', 'walk', 'andar', 'mover', 'ir']:
         player_move(action.lower())
-    elif action. lower() in ['examine', 'inspect', 'interact', 'look']:
+    elif action. lower() in ['examine', 'inspect', 'interact', 'look', 'olhar', 'examinar', 'pegar']:
         print('Desenvolvimento')
     elif action. lower() in ['craft','crafting','criar','criar item']:
         escolher_receita()
 
 
 def player_move(myAction):
-    ask= "Where would you like to move to?\n"
+    ask= "Para onde você gostaria de ir?\n"
     dest = input (ask)
-    if dest in ['up', 'north']:
+    if dest in ['up', 'north', 'cima', 'norte']:
         movement_handler(1, 'y')
-    elif dest in ['left', 'west']:
+    elif dest in ['left', 'west', 'esquerda', 'oeste']:
         movement_handler(-1, 'x')
-    elif dest in ['east', 'right']:
+    elif dest in ['east', 'right', 'leste', 'direita']:
         movement_handler(1, 'x')
-    elif dest in ['south', 'down']:
+    elif dest in ['south', 'down', 'sul', 'baixo']:
         movement_handler(-1, 'y')
 
 def movement_handler(ammount, side):
@@ -288,13 +134,13 @@ def movement_handler(ammount, side):
     x = posicao[0][0]
     y = posicao[0][1]
     if ammount == 1 and side == 'y' and y == 4:
-        print("Cant go any futher in this direction!")
+        print("Não da para seguir nessa direção")
     elif ammount == 1 and side == 'x' and x == 4:
-        print("Cant go any futher in this direction!")
+        print("Não da para seguir nessa direção")
     elif ammount == -1 and side == 'y' and y == 1:
-        print("Cant go any futher in this direction!")
+        print("Não da para seguir nessa direção")
     elif ammount == -1 and side == 'x' and x == 1:
-        print("Cant go any futher in this direction!")
+        print("Não da para seguir nessa direção")
     else:
         if ammount > 0:
             if side == 'x':
@@ -314,7 +160,7 @@ def movement_handler(ammount, side):
 
         cur.execute('UPDATE posicao SET x = (%s), y = (%s) WHERE id_personagem = (%s)',(x, y, id_personagem))
         connection.commit()
-        print("\n" + "You have moved to the " + str(x) + str(y) + ".")
+        print("\n" + "Você se moveu para a posição: " + str(x) + str(y) + ".")
 
         if x == 1:
             sala = 'a' + str(y)
@@ -495,6 +341,17 @@ def encontro_handler(encontro, sala):
                             cur.execute('UPDATE instancia_pc SET vidaatual = (%s) WHERE id_pc = (%s)',(vidaPlayer, ID_PC))
                             turno = 1
                 connection.commit()
+
+    # elif encontro == 'item':
+    #     global Lista_itens
+    #     cur.execute("SELECT nome FROM item")
+    #     lista_item = cur.fetchall()
+    #     for item in Lista_itens:
+    #         if item[0] == sala:
+    #             #mostra o item
+    #             break
+    #         else:
+    #             Lista_itens.append([sala, random.choice(lista_item)])
 
 
 
