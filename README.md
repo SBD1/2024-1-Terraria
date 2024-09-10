@@ -20,11 +20,14 @@ Repositório do trabalho realizado para a disciplina de Sistema de Banco de Dado
 
 ## Como executar o jogo
 
-* Tenha instalado o Docker e python
+* Tenha instalado o Docker, Docker-Compose e Python
 * Execute os comandos dentro da pasta 'jogo':
 
 ```
 docker-compose up -d
+```
+```
+pip install -r requirements.txt
 ```
 ```
 python jogo.py
