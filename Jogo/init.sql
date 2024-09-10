@@ -347,9 +347,9 @@ INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Serra de Madeira', 'Ferrament
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Picareta de Ouro', 'Ferramenta', TRUE);
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Martelo de Prata', 'Ferramenta', TRUE);
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Arco de Madeira', 'Ferramenta', TRUE);
-INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Diamante', 'Arma', FALSE);
-INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Ferro', 'Arma', FALSE);
-INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Braco de zumbi', 'Arma', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Diamante', 'Ferramenta', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Ferro', 'Ferramenta', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Braco de zumbi', 'Ferramenta', FALSE);
 
 -- Itens para Bloco
 INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Bloco de Madeira', 'Bloco', TRUE);
@@ -417,7 +417,7 @@ VALUES ('Espada', 70, 0, 4, 'Espada de Ferro');
 INSERT INTO Ferramenta (Tipo, Poder, Eficiencia, ChanceCrit, Item_Nome)
 VALUES ('Espada', 100, 0, 4, 'Espada de Diamante');
 INSERT INTO Ferramenta (Tipo, Poder, Eficiencia, ChanceCrit, Item_Nome)
-VALUES ('Braco', 10, 0, 4, 'Braco de zumbi');
+VALUES ('Braco', 25, 0, 4, 'Braco de zumbi');
 
 -- Inserindo modificadores
 INSERT INTO Modificador (Nome, Efeito)

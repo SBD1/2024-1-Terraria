@@ -196,12 +196,14 @@ def movement_handler(ammount, side):
                 print("Não tem nada nessa sala")
         
 def encontro_handler(encontro, sala):
-    print(encontro)
-
     Combate = ['slime', 'zumbi']
     npc = ['guia', 'mercador', 'enfermeira']
-    item = ['minerio', 'item', 'tesouro']
-
+    cur.execute("SELECT COUNT(*) FROM item WHERE nome = (%s)", [encontro])
+    contador_item = cur.fetchone()[0]
+    cur.execute("SELECT nome FROM item WHERE tipo = 'Material'")
+    lista_material = [row[0] for row in cur.fetchall()]
+    cur.execute("SELECT nome FROM item WHERE tipo = 'Ferramenta' OR tipo = 'Equipavel'")
+    lista_tesouro = [row[0] for row in cur.fetchall()]
     if encontro in npc:
         cur.execute("""SELECT texto FROM dialogo 
                     JOIN npc ON tipo = (%s) 
@@ -245,7 +247,6 @@ def encontro_handler(encontro, sala):
         dano = cur.fetchone()[0]
         if dano == None:
             dano = 10
-        print(dano)
 
       
         dialogo = "Você encontrou um " + encontro + ", Prepare-se para o combate"
@@ -320,38 +321,65 @@ def encontro_handler(encontro, sala):
                     else:
                         cur.execute('UPDATE instancia_pc SET vidaatual = (%s) WHERE id_pc = (%s)',(vidaPlayer, ID_PC))
                         turno = 1
-                    if encontro == "slime":
-                        display_text("Você sofreu 7 de dano!!!")
-                        vidaPlayer = vidaPlayer - 7
-                        display_text("Sua vida é: " + str(vidaPlayer))
-                        if vidaPlayer <= 0:
-                            luta = False
-                            cur.execute('DELETE FROM instancia_pc WHERE id_pc = (%s)', [ID_PC])
-                            cur.execute('DELETE FROM pc WHERE id_pc = (%s)', [ID_PC])
-                            cur.execute("""
-                                SELECT id_p FROM personagem
-                                JOIN pc ON id_p = id_personagem
-                                WHERE id_pc = (%s)
-                            """, (ID_PC,))
-                            id_personagem = cur.fetchone()[0]
-                            cur.execute('DELETE FROM personagem WHERE id_p = (%s)', [id_personagem])
-                            display_text('Você perdeu o jogo, Comece de novo.')
-                            sys.exit()
-                        else:
-                            cur.execute('UPDATE instancia_pc SET vidaatual = (%s) WHERE id_pc = (%s)',(vidaPlayer, ID_PC))
-                            turno = 1
+                if encontro == "slime":
+                    display_text("Você sofreu 7 de dano!!!")
+                    vidaPlayer = vidaPlayer - 7
+                    display_text("Sua vida é: " + str(vidaPlayer))
+                    if vidaPlayer <= 0:
+                        luta = False
+                        cur.execute('DELETE FROM instancia_pc WHERE id_pc = (%s)', [ID_PC])
+                        cur.execute('DELETE FROM pc WHERE id_pc = (%s)', [ID_PC])
+                        cur.execute("""
+                            SELECT id_p FROM personagem
+                            JOIN pc ON id_p = id_personagem
+                            WHERE id_pc = (%s)
+                        """, (ID_PC,))
+                        id_personagem = cur.fetchone()[0]
+                        cur.execute('DELETE FROM personagem WHERE id_p = (%s)', [id_personagem])
+                        display_text('Você perdeu o jogo, Comece de novo.')
+                        sys.exit()
+                    else:
+                        cur.execute('UPDATE instancia_pc SET vidaatual = (%s) WHERE id_pc = (%s)',(vidaPlayer, ID_PC))
+                        turno = 1
                 connection.commit()
 
-    # elif encontro == 'item':
-    #     global Lista_itens
-    #     cur.execute("SELECT nome FROM item")
-    #     lista_item = cur.fetchall()
-    #     for item in Lista_itens:
-    #         if item[0] == sala:
-    #             #mostra o item
-    #             break
-    #         else:
-    #             Lista_itens.append([sala, random.choice(lista_item)])
+    if contador_item > 0:
+        display_text("Você encontrou " + encontro)
+        if encontro in lista_material:
+            add = random.sample(lista_material, 2)
+            add.append(encontro)
+            for item in add:
+                quantidade = random.randrange(1, 20)
+                cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, item))
+                tem = cur.fetchone()[0]
+                if tem == 0:
+                    cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", (item, ID_PC, quantidade))
+                else:
+                    cur.execute("""UPDATE contem SET quantidade = quantidade + (%s) WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", (quantidade ,item, ID_PC))
+                cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
+            connection.commit()
+
+        elif encontro in lista_tesouro: 
+            cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, encontro))
+            tem = cur.fetchone()[0]
+            if tem == 0:
+                cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", (encontro, ID_PC, 1))
+            else:
+                cur.execute("""UPDATE contem SET quantidade = quantidade + 1 WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", (encontro, ID_PC))
+            cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
+            connection.commit()
+
+        else:
+            quantidade = random.randrange(1, 20)
+            cur.execute("""SELECT COUNT(*) FROM contem WHERE (%s) = id_instancia_pc AND (%s) = item_nome""", (ID_PC, encontro))
+            tem = cur.fetchone()[0]
+            if tem == 0:
+                cur.execute("INSERT INTO contem (item_nome, id_instancia_pc, quantidade)VALUES (%s, %s, %s)", (encontro, ID_PC, quantidade))
+            else:
+                cur.execute("""UPDATE contem SET quantidade = quantidade + (%s) WHERE item_nome = (%s) AND id_instancia_pc = (%s)""", (quantidade, encontro, ID_PC))
+            cur.execute(f'UPDATE instancia_mundo SET {sala} = NULL WHERE id_pc = {ID_PC}')
+            connection.commit()
+
 
 
 
@@ -495,7 +523,7 @@ def escolher_receita():
     id_receita = receitas[escolha][0]
     print("id da receita escolhida: " + str(id_receita))
 
-    adicionar_itens_para_receita(connection,ID_PC,id_receita)
+    #adicionar_itens_para_receita(connection,ID_PC,id_receita)
 
     # Chamar a função de fabricar item
     fabricar_item(connection, ID_PC, id_receita)

@@ -57,57 +57,54 @@ INSERT INTO Evento (Nome, Tipo, Data_Inicio, Data_Fim)
 VALUES ('Chuva de Meteoros', 'Aleatorio', '2024-11-21', '2024-11-21');
 
 -- Itens para Consumível
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Pocao de Resistencia ao Fogo', 'Consumivel', TRUE, 10);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Pocao de Agilidade', 'Consumivel', TRUE, 10);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Pocao de Cura', 'Consumivel', TRUE, 10);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Pocao de Mana', 'Consumivel', TRUE, 10);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Flecha', 'Consumivel', TRUE, 50);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Gel', 'Consumivel', TRUE, 100);
-
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Pocao de Resistencia ao Fogo', 'Consumivel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Pocao de Agilidade', 'Consumivel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Pocao de Cura', 'Consumivel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Pocao de Mana', 'Consumivel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Flecha', 'Consumivel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Gel', 'Consumivel', TRUE);
 
 -- Itens para Roupa
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Elmo de Aço', 'Equipavel', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Escudo de Prata', 'Equipavel', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Armadura de Couro', 'Equipavel', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Elmo de Ouro', 'Equipavel', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Capa Magica', 'Acessório', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Armadura de Ouro', 'Armadura', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Roupa de Bruxa', 'Acessório', FALSE, 1);
-
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Elmo de Aço', 'Equipavel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Escudo de Prata', 'Equipavel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Armadura de Couro', 'Equipavel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Elmo de Ouro', 'Equipavel', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Capa Magica', 'Acessório', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Armadura de Ouro', 'Armadura', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Roupa de Bruxa', 'Acessório', FALSE);
 
 -- Itens para Acessório
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Anel de Velocidade', 'Acessorio', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Colar de Fogo', 'Acessorio', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Amuleto de Mana', 'Acessorio', FALSE, 1);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Anel de Velocidade', 'Acessorio', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Colar de Fogo', 'Acessorio', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Amuleto de Mana', 'Acessorio', TRUE);
 
 -- Itens para Ferramenta
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Machado de Ferro', 'Ferramenta', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Serra de Madeira', 'Ferramenta', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Picareta de Ouro', 'Ferramenta', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Martelo de Prata', 'Ferramenta', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Arco de Madeira', 'Ferramenta', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Espada de Diamante', 'Arma', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Espada de Ferro', 'Arma', FALSE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Braco de zumbi', 'Arma', FALSE, 1);
-
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Machado de Ferro', 'Ferramenta', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Serra de Madeira', 'Ferramenta', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Picareta de Ouro', 'Ferramenta', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Martelo de Prata', 'Ferramenta', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Arco de Madeira', 'Ferramenta', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Diamante', 'Ferramenta', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Espada de Ferro', 'Ferramenta', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Braco de zumbi', 'Ferramenta', FALSE);
 
 -- Itens para Bloco
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Bloco de Madeira', 'Bloco', TRUE, 100);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Bloco de Ferro', 'Bloco', TRUE, 50);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Bloco de Pedra', 'Bloco', TRUE, 200);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Bloco de Ouro', 'Bloco', TRUE, 10);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Forja', 'Bloco', TRUE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Mesa de Trabalho', 'Bloco', TRUE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Estante do Mago', 'Bloco', TRUE, 1);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Bloco de Madeira', 'Bloco', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Bloco de Ferro', 'Bloco', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Bloco de Pedra', 'Bloco', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Bloco de Ouro', 'Bloco', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Forja', 'Bloco', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Mesa de Trabalho', 'Bloco', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Estante do Mago', 'Bloco', FALSE);
 
 -- Itens Para Receita
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Diamante', 'Material', TRUE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Madeira', 'Material', TRUE, 50);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Lona', 'Material', TRUE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Ferro', 'Material', TRUE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Ouro', 'Material', TRUE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Couro', 'Material', TRUE, 1);
-INSERT INTO Item (Nome, Tipo, Acumulavel, Quantidade) VALUES ('Tecido', 'Material', TRUE, 20);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Diamante', 'Material', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Madeira', 'Material', TRUE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Lona', 'Material', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Ferro', 'Material', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Ouro', 'Material', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Couro', 'Material', FALSE);
+INSERT INTO Item (Nome, Tipo, Acumulavel) VALUES ('Tecido', 'Material', TRUE);
 
 
 -- Inserindo consumíveis
@@ -157,7 +154,7 @@ VALUES ('Espada', 70, 0, 4, 'Espada de Ferro');
 INSERT INTO Ferramenta (Tipo, Poder, Eficiencia, ChanceCrit, Item_Nome)
 VALUES ('Espada', 100, 0, 4, 'Espada de Diamante');
 INSERT INTO Ferramenta (Tipo, Poder, Eficiencia, ChanceCrit, Item_Nome)
-VALUES ('Braco', 10, 0, 4, 'Braco de zumbi');
+VALUES ('Braco', 25, 0, 4, 'Braco de zumbi');
 
 -- Inserindo modificadores
 INSERT INTO Modificador (Nome, Efeito)
