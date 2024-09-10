@@ -18,6 +18,9 @@ Repositório do trabalho realizado para a disciplina de Sistema de Banco de Dado
 ### Módulo 2
 [Vídeo entrega](https://youtu.be/iCeee5K-8Aw)
 
+### Módulo 3
+[Vídeo entrega](https://youtu.be/Bge9jlwD2v4)
+
 ## Como executar o jogo
 
 * Tenha instalado o Docker, Docker-Compose e Python
